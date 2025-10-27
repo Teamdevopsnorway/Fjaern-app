@@ -1,8 +1,9 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import Svg, { Path, Circle, Ellipse } from "react-native-svg";
+import Svg, { Path, Circle, Ellipse, G } from "react-native-svg";
 import Animated, {
   useAnimatedStyle,
+  useAnimatedProps,
   useSharedValue,
   withRepeat,
   withSequence,
@@ -20,13 +21,26 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
   animate = false
 }) => {
   const peek = useSharedValue(0);
+  const wave = useSharedValue(0);
 
   React.useEffect(() => {
     if (animate) {
+      // Body bounce animation
       peek.value = withRepeat(
         withSequence(
           withTiming(1, { duration: 800 }),
           withSpring(0, { damping: 10 })
+        ),
+        -1,
+        false
+      );
+
+      // Wave animation for right arm
+      wave.value = withRepeat(
+        withSequence(
+          withTiming(1, { duration: 500 }),
+          withTiming(-1, { duration: 500 }),
+          withTiming(0, { duration: 300 })
         ),
         -1,
         false
@@ -40,6 +54,12 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
       { scale: 1 + peek.value * 0.1 }
     ],
   }));
+
+  const waveProps = useAnimatedProps(() => ({
+    transform: `rotate(${wave.value * 25}, 78, 55)`
+  }));
+
+  const AnimatedG = Animated.createAnimatedComponent(G);
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
@@ -161,7 +181,7 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
         <Circle cx="35" cy="39" r="1" fill="#5A7A9A" opacity="0.4" />
         <Circle cx="65" cy="39" r="1" fill="#5A7A9A" opacity="0.4" />
 
-        {/* Arms - chubby and cute, better positioned */}
+        {/* Left arm - static */}
         <Ellipse
           cx="22"
           cy="65"
@@ -170,18 +190,23 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           fill="#6A8BB5"
           transform="rotate(-15 22 65)"
         />
-        <Ellipse
-          cx="78"
-          cy="65"
-          rx="8"
-          ry="18"
-          fill="#6A8BB5"
-          transform="rotate(15 78 65)"
-        />
-
-        {/* Hands - small rounded */}
         <Circle cx="18" cy="80" r="5" fill="#5A7A9A" />
-        <Circle cx="82" cy="80" r="5" fill="#5A7A9A" />
+
+        {/* Right arm and hand - animated waving */}
+        <AnimatedG
+          origin="78, 55"
+          animatedProps={animate ? waveProps : undefined}
+        >
+          <Ellipse
+            cx="78"
+            cy="65"
+            rx="8"
+            ry="18"
+            fill="#6A8BB5"
+            transform="rotate(15 78 65)"
+          />
+          <Circle cx="82" cy="80" r="5" fill="#5A7A9A" />
+        </AnimatedG>
 
         {/* Feet - bigger and cuter */}
         <Ellipse
