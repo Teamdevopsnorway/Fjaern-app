@@ -11,7 +11,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { TrollAvatar } from "./TrollAvatar";
-import { useSubscriptionStore } from "../state/subscriptionStore";
 import { restorePurchases } from "../utils/iapHandler";
 
 interface PaywallModalProps {
@@ -27,9 +26,9 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 }) => {
   const scale = useSharedValue(0);
 
-  // Use individual selectors to avoid infinite loops
-  const deletedCount = useSubscriptionStore((s) => s.deletedCount);
-  const freeDeleteLimit = useSubscriptionStore((s) => s.freeDeleteLimit);
+  // Placeholder values since this modal is not actively used
+  const deletedCount = 0;
+  const freeDeleteLimit = 30;
 
   useEffect(() => {
     if (visible) {

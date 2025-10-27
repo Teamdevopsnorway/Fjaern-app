@@ -7,14 +7,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { usePhotoStore } from "../state/photoStore";
 import { useGamificationStore } from "../state/gamificationStore";
-import { useSubscriptionStore } from "../state/subscriptionStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { CelebrationModal } from "../components/CelebrationModal";
 import { DailyGoalCelebrationModal } from "../components/DailyGoalCelebrationModal";
-import { PaywallModal } from "../components/PaywallModal";
 import { TrollAvatar } from "../components/TrollAvatar";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
-import { purchaseProSubscription } from "../utils/iapHandler";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -24,7 +21,6 @@ export function SwipeScreenNew(props: any) {
   const [hasPermission, setHasPermission] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [currentMilestone, setCurrentMilestone] = useState(0);
-  const [showPaywall, setShowPaywall] = useState(false);
   const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
 
   // Use individual selectors for photoStore to avoid infinite loops
@@ -53,18 +49,6 @@ export function SwipeScreenNew(props: any) {
   const getTodaySpaceSavedFormatted = useGamificationStore.getState().getTodaySpaceSavedFormatted;
   const getDailyProgress = useGamificationStore.getState().getDailyProgress;
 
-  // Use individual selectors to avoid infinite loops
-  const isPro = useSubscriptionStore((s) => s.isPro);
-  const deletedCount = useSubscriptionStore((s) => s.deletedCount);
-  const freeDeleteLimit = useSubscriptionStore((s) => s.freeDeleteLimit);
-
-  // Get functions from store - these are stable references
-  const incrementDeleteCount = useSubscriptionStore.getState().incrementDeleteCount;
-
-  // Calculate values locally instead of using functions from store
-  const hasReachedLimit = !isPro && deletedCount >= freeDeleteLimit;
-  const remainingDeletes = isPro ? -1 : Math.max(0, freeDeleteLimit - deletedCount);
-
   useEffect(() => {
     initializePhotos();
     updateStreak();
@@ -86,17 +70,8 @@ export function SwipeScreenNew(props: any) {
   const handleSwipeLeft = () => {
     const photo = getCurrentPhoto();
     if (photo) {
-      // Check subscription limit BEFORE incrementing
-      if (hasReachedLimit) {
-        setShowPaywall(true);
-        return;
-      }
-
-      // Now we can safely delete
+      // Delete the photo
       markToDelete(photo);
-
-      // Increment count AFTER successful delete
-      incrementDeleteCount();
 
       // Gamification: increment and check for milestone and daily goal
       const result = incrementPhotosCleaned(2 * 1024 * 1024); // 2MB estimate
@@ -126,24 +101,11 @@ export function SwipeScreenNew(props: any) {
   };
 
   const handleButtonPress = (action: "delete" | "keep") => {
-    // Check limit before allowing delete action
-    if (action === "delete" && hasReachedLimit) {
-      setShowPaywall(true);
-      return;
-    }
-
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     if (action === "delete") {
       handleSwipeLeft();
     } else {
       handleSwipeRight();
-    }
-  };
-
-  const handleUpgradeToPro = async () => {
-    const success = await purchaseProSubscription();
-    if (success) {
-      setShowPaywall(false);
     }
   };
 
@@ -287,7 +249,7 @@ export function SwipeScreenNew(props: any) {
             </View>
 
             {/* Stats Row */}
-            {(todaysPhotosDeleted > 0 || !isPro || dailyGoal > 0) && (
+            {(todaysPhotosDeleted > 0 || dailyGoal > 0) && (
               <View style={styles.statsRow}>
                 {todaysPhotosDeleted > 0 && (
                   <>
@@ -310,16 +272,6 @@ export function SwipeScreenNew(props: any) {
                       {todaysPhotosDeleted}/{dailyGoal}
                     </Text>
                   </View>
-                )}
-
-                {/* Free tier indicator */}
-                {!isPro && (
-                  <Pressable onPress={() => setShowPaywall(true)} style={styles.proUpgradeBadge}>
-                    <Ionicons name="star" size={14} color="#FFD700" />
-                    <Text style={styles.proUpgradeText}>
-                      {remainingDeletes} gratis igjen
-                    </Text>
-                  </Pressable>
                 )}
               </View>
             )}
@@ -411,13 +363,6 @@ export function SwipeScreenNew(props: any) {
         onClose={() => setShowCelebration(false)}
         milestoneNumber={currentMilestone}
         spaceSaved={getTodaySpaceSavedFormatted()}
-      />
-
-      {/* Paywall Modal */}
-      <PaywallModal
-        visible={showPaywall}
-        onClose={() => setShowPaywall(false)}
-        onUpgrade={handleUpgradeToPro}
       />
 
       {/* Daily Goal Celebration Modal */}
