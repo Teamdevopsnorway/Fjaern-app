@@ -128,7 +128,7 @@ Disse vilkårene reguleres av norsk lov. Eventuelle tvister skal løses i norske
 
 Hvis du har spørsmål om disse vilkårene:
 
-- **E-post**: [DIN_EPOST@example.com]
+- **E-post**: kontakt@fjaern.no
 - **App Store**: Fjærn support side
 
 ## 13. Separabilitet

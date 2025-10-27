@@ -58,7 +58,7 @@ Dine sider vil være tilgjengelige på:
 **VIKTIG**: Før du publiserer, oppdater følgende:
 
 ### I ALLE HTML-filer:
-- `[DIN_EPOST@example.com]` → Din faktiske e-post
+- `kontakt@fjaern.no` → Din faktiske e-post
 
 ### I app.json:
 Legg til denne URLen i App Store Connect når du søker om godkjenning.
@@ -98,4 +98,4 @@ GitHub Pages er:
 
 ## 📧 Kontakt
 
-For spørsmål om disse dokumentene, kontakt [DIN_EPOST@example.com]
+For spørsmål om disse dokumentene, kontakt kontakt@fjaern.no

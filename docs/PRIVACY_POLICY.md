@@ -79,7 +79,7 @@ Vi kan oppdatere denne personvernerklæringen fra tid til annen. Vi vil varsle d
 
 Hvis du har spørsmål om denne personvernerklæringen, kan du kontakte oss:
 
-- **E-post**: [DIN_EPOST@example.com]
+- **E-post**: kontakt@fjaern.no
 - **App Store**: Fjærn support side
 
 ## GDPR-samsvar
