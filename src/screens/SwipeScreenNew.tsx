@@ -6,7 +6,10 @@ import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { usePhotoStore } from "../state/photoStore";
+import { useGamificationStore } from "../state/gamificationStore";
 import { SwipeCard } from "../components/SwipeCard";
+import { CelebrationModal } from "../components/CelebrationModal";
+import { TrollAvatar } from "../components/TrollAvatar";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -15,6 +18,8 @@ export function SwipeScreenNew(props: any) {
   const navigation = props.navigation;
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [currentMilestone, setCurrentMilestone] = useState(0);
 
   const {
     allPhotos,
@@ -28,8 +33,19 @@ export function SwipeScreenNew(props: any) {
     photosToDelete,
   } = usePhotoStore();
 
+  const {
+    currentStreak,
+    todaysPhotosDeleted,
+    incrementPhotosCleaned,
+    updateStreak,
+    resetDailyStats,
+    getTodaySpaceSavedFormatted,
+  } = useGamificationStore();
+
   useEffect(() => {
     initializePhotos();
+    updateStreak();
+    resetDailyStats();
   }, []);
 
   const initializePhotos = async () => {
@@ -48,6 +64,14 @@ export function SwipeScreenNew(props: any) {
     const photo = getCurrentPhoto();
     if (photo) {
       markToDelete(photo);
+
+      // Gamification: increment and check for milestone
+      const result = incrementPhotosCleaned(2 * 1024 * 1024); // 2MB estimate
+      if (result.milestone) {
+        setCurrentMilestone(result.milestoneNumber);
+        setShowCelebration(true);
+      }
+
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
   };
@@ -172,29 +196,55 @@ export function SwipeScreenNew(props: any) {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#F3E8FF", "#DBEAFE"]}
+        colors={["#E8F4F8", "#B8D4E0"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
       >
         <SafeAreaView style={styles.safeArea}>
-          {/* Header */}
+          {/* Header with Stats */}
           <View style={styles.header}>
             <View style={styles.headerContent}>
-              <View>
-                <Text style={styles.headerTitle}>Rydd Opp</Text>
-                <Text style={styles.headerSubtitle}>
-                  {currentIndex + 1} / {allPhotos.length} bilder
-                </Text>
+              <View style={styles.headerLeft}>
+                <TrollAvatar size={50} animate={todaysPhotosDeleted > 0} />
+                <View style={styles.headerTextContainer}>
+                  <Text style={styles.headerTitle}>Rydd Opp</Text>
+                  <Text style={styles.headerSubtitle}>
+                    {currentIndex + 1} / {allPhotos.length} bilder
+                  </Text>
+                </View>
               </View>
 
-              {photosToDelete.length > 0 && (
-                <Pressable onPress={handleReview} style={styles.deleteCounter}>
-                  <Ionicons name="trash-outline" size={18} color="#EF4444" />
-                  <Text style={styles.deleteCountText}>{photosToDelete.length}</Text>
-                </Pressable>
-              )}
+              <View style={styles.headerRight}>
+                {currentStreak > 0 && (
+                  <View style={styles.streakBadge}>
+                    <Ionicons name="flame" size={16} color="#FF6B35" />
+                    <Text style={styles.streakText}>{currentStreak}</Text>
+                  </View>
+                )}
+
+                {photosToDelete.length > 0 && (
+                  <Pressable onPress={handleReview} style={styles.deleteCounter}>
+                    <Ionicons name="trash-outline" size={18} color="#EF4444" />
+                    <Text style={styles.deleteCountText}>{photosToDelete.length}</Text>
+                  </Pressable>
+                )}
+              </View>
             </View>
+
+            {/* Stats Row */}
+            {todaysPhotosDeleted > 0 && (
+              <View style={styles.statsRow}>
+                <View style={styles.statBadge}>
+                  <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
+                  <Text style={styles.statText}>{todaysPhotosDeleted} i dag</Text>
+                </View>
+                <View style={styles.statBadge}>
+                  <Ionicons name="cloud-upload" size={14} color="#2196F3" />
+                  <Text style={styles.statText}>{getTodaySpaceSavedFormatted()} spart</Text>
+                </View>
+              </View>
+            )}
 
             {/* Progress Bar */}
             <View style={styles.progressBar}>
@@ -276,6 +326,14 @@ export function SwipeScreenNew(props: any) {
           </BlurView>
         </SafeAreaView>
       </LinearGradient>
+
+      {/* Celebration Modal */}
+      <CelebrationModal
+        visible={showCelebration}
+        onClose={() => setShowCelebration(false)}
+        milestoneNumber={currentMilestone}
+        spaceSaved={getTodaySpaceSavedFormatted()}
+      />
     </View>
   );
 }
@@ -283,7 +341,7 @@ export function SwipeScreenNew(props: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F3E8FF",
+    backgroundColor: "#E8F4F8",
   },
   gradient: {
     flex: 1,
@@ -379,16 +437,67 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 12,
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerTextContainer: {
+    gap: 2,
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  streakBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 100,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    gap: 4,
+    shadowColor: "#FF6B35",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  streakText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#FF6B35",
+  },
+  statsRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 12,
+  },
+  statBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 100,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    gap: 6,
+  },
+  statText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#2C5F7C",
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#1F2937",
+    color: "#2C5F7C",
   },
   headerSubtitle: {
     fontSize: 14,
-    color: "#6B7280",
+    color: "#5A8BA3",
     marginTop: 4,
   },
   deleteCounter: {
@@ -418,7 +527,7 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#8B5CF6",
+    backgroundColor: "#2C5F7C",
     borderRadius: 100,
   },
   cardStack: {

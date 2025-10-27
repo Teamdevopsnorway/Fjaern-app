@@ -119,7 +119,7 @@ export function ReviewScreenNew(props: any) {
         {/* Stats Card */}
         <View style={styles.statsContainer}>
           <LinearGradient
-            colors={["#8B5CF6", "#3B82F6"]}
+            colors={["#2C5F7C", "#4A8BA8"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.statsGradient}
