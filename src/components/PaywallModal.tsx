@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Modal, Pressable, ScrollView } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
@@ -26,20 +20,11 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   deletedToday,
   limit,
 }) => {
-  const scale = useSharedValue(0);
-
   useEffect(() => {
     if (visible) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-      scale.value = withSpring(1, { damping: 15 });
-    } else {
-      scale.value = 0;
     }
   }, [visible]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
 
   const handleUpgrade = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -48,9 +33,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
   const handleClose = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    scale.value = withTiming(0, { duration: 200 });
-    setTimeout(onClose, 200);
+    onClose();
   };
+
+  if (!visible) return null;
 
   return (
     <Modal
@@ -60,7 +46,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
       onRequestClose={handleClose}
     >
       <View style={styles.overlay}>
-        <Animated.View style={[styles.content, animatedStyle]}>
+        <View style={styles.content}>
           <LinearGradient
             colors={["#E8F4F8", "#B8D4E0"]}
             style={styles.gradient}
@@ -220,7 +206,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               </Text>
             </ScrollView>
           </LinearGradient>
-        </Animated.View>
+        </View>
       </View>
     </Modal>
   );
