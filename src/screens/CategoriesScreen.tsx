@@ -14,23 +14,55 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { usePhotoStore } from "../state/photoStore";
 import { categorizePhotos, PhotoCategory } from "../utils/photoAnalysis";
-import { formatBytes } from "../utils/photoUtils";
+import { formatBytes, loadPhotos, requestPermissions } from "../utils/photoUtils";
 import { Photo } from "../types/photo";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 
 export const CategoriesScreen = ({ navigation }: { navigation: any }) => {
   const allPhotos = usePhotoStore((s) => s.allPhotos);
+  const setPhotos = usePhotoStore.getState().setPhotos;
   const markToDelete = usePhotoStore.getState().markToDelete;
 
   const [categories, setCategories] = useState<PhotoCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<PhotoCategory | null>(null);
   const [selectedPhotos, setSelectedPhotos] = useState<Set<string>>(new Set());
+  const [permissionGranted, setPermissionGranted] = useState(false);
 
   useEffect(() => {
-    analyzePhotos();
+    checkPermissionsAndLoadPhotos();
+  }, []);
+
+  useEffect(() => {
+    if (allPhotos.length > 0) {
+      analyzePhotos();
+    }
   }, [allPhotos]);
+
+  const checkPermissionsAndLoadPhotos = async () => {
+    setLoading(true);
+    const hasPermission = await requestPermissions();
+
+    if (!hasPermission) {
+      setPermissionGranted(false);
+      setLoading(false);
+      return;
+    }
+
+    setPermissionGranted(true);
+
+    // Load photos if not already loaded
+    if (allPhotos.length === 0) {
+      console.log("Loading photos...");
+      const photos = await loadPhotos();
+      console.log(`Loaded ${photos.length} photos`);
+      setPhotos(photos);
+    } else {
+      // Photos already loaded, just analyze
+      analyzePhotos();
+    }
+  };
 
   const analyzePhotos = async () => {
     setLoading(true);
@@ -101,6 +133,45 @@ export const CategoriesScreen = ({ navigation }: { navigation: any }) => {
     setSelectedPhotos(new Set());
   };
 
+  // Permission denied state
+  if (!loading && !permissionGranted) {
+    return (
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <LinearGradient
+          colors={["#FFFFFF", "#EF4444", "#1E40AF"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.gradient}
+        >
+          <View style={styles.header}>
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}
+            >
+              <Ionicons name="arrow-back" size={24} color="#1E40AF" />
+            </Pressable>
+            <Text style={styles.headerTitle}>Smarte Kategorier</Text>
+            <View style={styles.backButton} />
+          </View>
+
+          <View style={styles.loadingContainer}>
+            <Ionicons name="lock-closed" size={64} color="#DC2626" />
+            <Text style={styles.emptyTitle}>Tillatelse Nektet</Text>
+            <Text style={styles.emptySubtitle}>
+              Gi appen tilgang til bildegalleriet for å bruke smart opprydding
+            </Text>
+            <Pressable
+              style={styles.retryButton}
+              onPress={checkPermissionsAndLoadPhotos}
+            >
+              <Text style={styles.retryButtonText}>Prøv Igjen</Text>
+            </Pressable>
+          </View>
+        </LinearGradient>
+      </SafeAreaView>
+    );
+  }
+
   if (loading) {
     return (
       <SafeAreaView style={styles.container} edges={["top"]}>
@@ -123,7 +194,9 @@ export const CategoriesScreen = ({ navigation }: { navigation: any }) => {
 
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#1E40AF" />
-            <Text style={styles.loadingText}>Analyserer bilder...</Text>
+            <Text style={styles.loadingText}>
+              {allPhotos.length === 0 ? "Laster bilder..." : "Analyserer bilder..."}
+            </Text>
           </View>
         </LinearGradient>
       </SafeAreaView>
@@ -363,6 +436,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 8,
     paddingHorizontal: 32,
+  },
+  retryButton: {
+    marginTop: 20,
+    backgroundColor: "#1E40AF",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  retryButtonText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
   },
   categoriesContainer: {
     gap: 16,
