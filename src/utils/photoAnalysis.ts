@@ -363,8 +363,8 @@ export const categorizePhotos = (allPhotos: Photo[]): PhotoCategory[] => {
   if (allBurstPhotos.length > 0) {
     categories.push({
       id: "bursts",
-      name: "Burst-bilder",
-      description: `${burstGroups.length} burst-serier funnet`,
+      name: "Bildeserie",
+      description: `${burstGroups.length} bildeserier funnet`,
       photos: allBurstPhotos,
       icon: "camera-outline",
       color: "#8B5CF6", // Purple
