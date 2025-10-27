@@ -25,20 +25,20 @@ export function WelcomeScreenNew(props: any) {
             <View style={styles.trollAvatarContainer}>
               <TrollAvatar size={120} animate={true} />
             </View>
-            <Text style={styles.title}>Fjærn</Text>
-            <Text style={styles.subtitle}>La trollet hjelpe deg å rydde i bildene! 🇳🇴</Text>
+            <Text style={styles.title}>Møt Fjærn! 👋</Text>
+            <Text style={styles.subtitle}>Det søteste trollet som hjelper deg slette bilder du ikke trenger 🗑️✨</Text>
           </View>
 
           {/* Features */}
           <View style={styles.features}>
             <View style={styles.featureCard}>
               <View style={styles.featureIconContainer}>
-                <Ionicons name="flame" size={24} color="#FF6B35" />
+                <Ionicons name="images" size={24} color="#EF4444" />
               </View>
               <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Streak System</Text>
+                <Text style={styles.featureTitle}>Swipe & Rydd 📱</Text>
                 <Text style={styles.featureDescription}>
-                  Hold streken din ved å rydde hver dag!
+                  Venstre = slett, Høyre = behold. Så enkelt er det!
                 </Text>
               </View>
             </View>
@@ -48,21 +48,21 @@ export function WelcomeScreenNew(props: any) {
                 <Ionicons name="trophy" size={24} color="#FFD700" />
               </View>
               <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Milepæler & Belønninger</Text>
+                <Text style={styles.featureTitle}>Få Belønninger 🎉</Text>
                 <Text style={styles.featureDescription}>
-                  Opplev glede hver 20. bilde du rydder!
+                  Fjærn feirer med deg hver 20. bilde!
                 </Text>
               </View>
             </View>
 
             <View style={styles.featureCard}>
               <View style={styles.featureIconContainer}>
-                <Ionicons name="happy" size={24} color="#4ECDC4" />
+                <Ionicons name="cloud-upload" size={24} color="#3B82F6" />
               </View>
               <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Søtt Troll-følgesvenn</Text>
+                <Text style={styles.featureTitle}>Frigjør Plass 💾</Text>
                 <Text style={styles.featureDescription}>
-                  Et koselig norsk troll heier på deg!
+                  Se hvor mye lagringsplass du sparer i sanntid!
                 </Text>
               </View>
             </View>
