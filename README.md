@@ -147,6 +147,45 @@ Using Zustand with AsyncStorage persistence for:
 
 ## Recent Updates
 
+### 💎 Freemium-modell & App Store Integration - FERDIG!
+
+**Fjærn har nå en komplett freemium-løsning med 30 gratis bilder!**
+
+**Nyeste endringer:**
+1. ✅ **30 Gratis Bilder** - Perfekt for å teste appen
+2. ✅ **Elegant Paywall Modal** - Vakker design med nordisk tema
+3. ✅ **App Store Integration** - Klar for react-native-iap
+4. ✅ **Sanntid Limit-tracking** - Viser "X gratis igjen" badge
+5. ✅ **Pro Subscription** - 99 kr/måned via App Store
+6. ✅ **Gjenopprett Kjøp** - Funksjon for eksisterende kunder
+
+**Nye Filer:**
+- **subscriptionStore.ts** - Zustand store for subscription-state
+- **PaywallModal.tsx** - Premium paywall med nordisk design
+- **iapHandler.ts** - App Store kjøps-handler (klar for IAP-pakke)
+
+**Funksjoner:**
+- 🆓 **30 gratis slettinger** for alle nye brukere
+- 💎 **Ubegrenset for Pro** - Ingen grenser med abonnement
+- 📊 **Live counter** - "X gratis igjen" badge i header
+- 🛡️ **Smart blokkering** - Paywall vises ved limit
+- 🔄 **Restore purchases** - Gjenopprett tidligere kjøp
+- 🎨 **Vakker UI** - Nordisk design med troll-avatar
+
+**Pro-funksjoner:**
+- ♾️ Ubegrenset bilderydding
+- 🏆 Alle milepæler og feiringer
+- ⚡ Prioritert support
+- ❤️ Støtt utvikling av appen
+
+**For å aktivere ekte App Store kjøp:**
+1. Installer: `bun add react-native-iap`
+2. Konfigurer App Store Connect med product ID: `fjaern_pro_monthly`
+3. Fjern kommentarer i `src/utils/iapHandler.ts`
+4. Test med sandbox-kontoer
+
+---
+
 ### 🎉 Nordisk Design & Dopamin-Gamification - FERDIG!
 
 **Fjærn er nå komplett med nordisk design og motiverende gamification!**

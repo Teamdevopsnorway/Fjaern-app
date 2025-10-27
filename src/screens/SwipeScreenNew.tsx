@@ -7,10 +7,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { usePhotoStore } from "../state/photoStore";
 import { useGamificationStore } from "../state/gamificationStore";
+import { useSubscriptionStore } from "../state/subscriptionStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { CelebrationModal } from "../components/CelebrationModal";
+import { PaywallModal } from "../components/PaywallModal";
 import { TrollAvatar } from "../components/TrollAvatar";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
+import { purchaseProSubscription } from "../utils/iapHandler";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -20,6 +23,7 @@ export function SwipeScreenNew(props: any) {
   const [hasPermission, setHasPermission] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [currentMilestone, setCurrentMilestone] = useState(0);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const {
     allPhotos,
@@ -42,6 +46,13 @@ export function SwipeScreenNew(props: any) {
     getTodaySpaceSavedFormatted,
   } = useGamificationStore();
 
+  const {
+    incrementDeleteCount,
+    hasReachedLimit,
+    getRemainingDeletes,
+    isPro,
+  } = useSubscriptionStore();
+
   useEffect(() => {
     initializePhotos();
     updateStreak();
@@ -63,6 +74,14 @@ export function SwipeScreenNew(props: any) {
   const handleSwipeLeft = () => {
     const photo = getCurrentPhoto();
     if (photo) {
+      // Check subscription limit
+      const limitReached = incrementDeleteCount();
+      if (limitReached) {
+        // Show paywall
+        setShowPaywall(true);
+        return;
+      }
+
       markToDelete(photo);
 
       // Gamification: increment and check for milestone
@@ -82,11 +101,24 @@ export function SwipeScreenNew(props: any) {
   };
 
   const handleButtonPress = (action: "delete" | "keep") => {
+    // Check limit before allowing delete action
+    if (action === "delete" && hasReachedLimit()) {
+      setShowPaywall(true);
+      return;
+    }
+
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     if (action === "delete") {
       handleSwipeLeft();
     } else {
       handleSwipeRight();
+    }
+  };
+
+  const handleUpgradeToPro = async () => {
+    const success = await purchaseProSubscription();
+    if (success) {
+      setShowPaywall(false);
     }
   };
 
@@ -230,16 +262,30 @@ export function SwipeScreenNew(props: any) {
             </View>
 
             {/* Stats Row */}
-            {todaysPhotosDeleted > 0 && (
+            {(todaysPhotosDeleted > 0 || !isPro) && (
               <View style={styles.statsRow}>
-                <View style={styles.statBadge}>
-                  <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
-                  <Text style={styles.statText}>{todaysPhotosDeleted} i dag</Text>
-                </View>
-                <View style={styles.statBadge}>
-                  <Ionicons name="cloud-upload" size={14} color="#2196F3" />
-                  <Text style={styles.statText}>{getTodaySpaceSavedFormatted()} spart</Text>
-                </View>
+                {todaysPhotosDeleted > 0 && (
+                  <>
+                    <View style={styles.statBadge}>
+                      <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
+                      <Text style={styles.statText}>{todaysPhotosDeleted} i dag</Text>
+                    </View>
+                    <View style={styles.statBadge}>
+                      <Ionicons name="cloud-upload" size={14} color="#2196F3" />
+                      <Text style={styles.statText}>{getTodaySpaceSavedFormatted()} spart</Text>
+                    </View>
+                  </>
+                )}
+
+                {/* Free tier indicator */}
+                {!isPro && (
+                  <Pressable onPress={() => setShowPaywall(true)} style={styles.proUpgradeBadge}>
+                    <Ionicons name="star" size={14} color="#FFD700" />
+                    <Text style={styles.proUpgradeText}>
+                      {getRemainingDeletes()} gratis igjen
+                    </Text>
+                  </Pressable>
+                )}
               </View>
             )}
 
@@ -330,6 +376,13 @@ export function SwipeScreenNew(props: any) {
         onClose={() => setShowCelebration(false)}
         milestoneNumber={currentMilestone}
         spaceSaved={getTodaySpaceSavedFormatted()}
+      />
+
+      {/* Paywall Modal */}
+      <PaywallModal
+        visible={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        onUpgrade={handleUpgradeToPro}
       />
     </View>
   );
@@ -486,6 +539,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     color: "#2C5F7C",
+  },
+  proUpgradeBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 215, 0, 0.2)",
+    borderRadius: 100,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: "#FFD700",
+  },
+  proUpgradeText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: "#B8860B",
   },
   headerTitle: {
     fontSize: 24,
