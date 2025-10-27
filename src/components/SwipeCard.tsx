@@ -80,17 +80,22 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({
       isSwiping.value = false;
 
       if (event.translationX > SWIPE_THRESHOLD) {
-        // Swipe right - Keep (faster animation)
+        // Swipe right - Keep (faster animation with strong haptic)
         translateX.value = withTiming(SCREEN_WIDTH * 1.3, { duration: 200 }, () => {
           runOnJS(onSwipeRight)();
         });
-        runOnJS(Haptics.notificationAsync)(Haptics.NotificationFeedbackType.Success);
+        // Strong success haptic for keeping photos
+        runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Heavy);
       } else if (event.translationX < -SWIPE_THRESHOLD) {
-        // Swipe left - Delete (faster animation)
+        // Swipe left - Delete (faster animation with satisfying haptic pattern)
         translateX.value = withTiming(-SCREEN_WIDTH * 1.3, { duration: 200 }, () => {
           runOnJS(onSwipeLeft)();
         });
-        runOnJS(Haptics.notificationAsync)(Haptics.NotificationFeedbackType.Success);
+        // Double tap haptic for deletion - more satisfying!
+        runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Medium);
+        setTimeout(() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }, 50);
       } else {
         // Return to center (snappy spring)
         translateX.value = withSpring(0, { damping: 15, stiffness: 150 });

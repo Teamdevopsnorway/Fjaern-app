@@ -11,6 +11,7 @@ import { SwipeCard } from "../components/SwipeCard";
 import { CelebrationModal } from "../components/CelebrationModal";
 import { DailyGoalCelebrationModal } from "../components/DailyGoalCelebrationModal";
 import { TrollAvatar } from "../components/TrollAvatar";
+import { MiniConfetti } from "../components/MiniConfetti";
 import { loadPhotos, requestPermissions, getPhotoFileSize } from "../utils/photoUtils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -26,6 +27,7 @@ export function SwipeScreenNew(props: any) {
   const [showCelebration, setShowCelebration] = useState(false);
   const [currentMilestone, setCurrentMilestone] = useState(0);
   const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
+  const [showMiniConfetti, setShowMiniConfetti] = useState(false);
 
   // Use individual selectors for photoStore to avoid infinite loops
   const allPhotos = usePhotoStore((s) => s.allPhotos);
@@ -74,6 +76,9 @@ export function SwipeScreenNew(props: any) {
   const handleSwipeLeft = async () => {
     const photo = getCurrentPhoto();
     if (photo) {
+      // Show mini confetti burst!
+      setShowMiniConfetti(true);
+
       // Delete the photo
       markToDelete(photo);
 
@@ -334,6 +339,13 @@ export function SwipeScreenNew(props: any) {
                 isTop={true}
                 index={0}
               />
+            )}
+
+            {/* Mini confetti burst on delete */}
+            {showMiniConfetti && (
+              <View style={styles.miniConfettiContainer}>
+                <MiniConfetti onComplete={() => setShowMiniConfetti(false)} />
+              </View>
             )}
           </View>
 
@@ -653,6 +665,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  miniConfettiContainer: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginLeft: -100,
+    marginTop: -100,
+    zIndex: 9999,
+    pointerEvents: "none",
   },
   bottomActions: {
     paddingBottom: 20,

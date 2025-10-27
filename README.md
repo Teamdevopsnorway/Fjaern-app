@@ -215,11 +215,19 @@ Using Zustand with AsyncStorage persistence for:
    - Categories har tilbake-knapp til GoalChoice
    - Fullstendig navigasjonsflyt
 
+5. ✅ **Dopamin-Skapende Feedback** (NYE!)
+   - **Distinkte vibrasjoner**: Heavy haptic for "Behold", dobbel-pulse for "Fjærn"
+   - **Mini konfetti**: Liten burst-animasjon ved hver sletting
+   - **"Fjærn"-branding**: Konsistent med app-navnet
+   - **Satisfying interactions**: Hver handling føles belønende
+
 **Tekniske forbedringer:**
 - `src/utils/photoAnalysis.ts` - Forbedret `findDuplicates()` algoritme
 - `src/screens/WelcomeScreenNew.tsx` - Smart forslag banner med blå gradient
 - `src/screens/CategoriesScreen.tsx` - Navigerer direkte til SwipeScreenNew med back button
-- `src/screens/SwipeScreenNew.tsx` - Conditional header med back button for både manuell og kategori-modus
+- `src/screens/SwipeScreenNew.tsx` - Conditional header med back button + mini konfetti
+- `src/components/SwipeCard.tsx` - Forbedret haptic feedback (Heavy/Medium+Light)
+- `src/components/MiniConfetti.tsx` - Ny komponent for burst-animasjon ved sletting
 - `src/screens/ReviewScreenNew.tsx` - Smart navigasjon tilbake til kategorier
 
 **Hvorfor dette gjør Fjærn MVP-ready:**
@@ -230,6 +238,7 @@ Using Zustand with AsyncStorage persistence for:
 - ✅ Norsk språk og søt troll-maskot for unik identitet
 - ✅ Gamification (streaks, milestones) for retensjon
 - ✅ Intuitiv navigasjon med tilbake-knapper overalt
+- ✅ Dopamin-skapende feedback som gjør rydding gøy!
 
 ---
 
