@@ -20,6 +20,7 @@ interface SubscriptionState {
   upgradeToPro: () => void;
   hasReachedLimit: () => boolean;
   getRemainingDeletes: () => number;
+  resetSubscription: () => void; // For testing/dev
 }
 
 export const useSubscriptionStore = create<SubscriptionState>()(
@@ -111,6 +112,17 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       // Upgrade to Pro
       upgradeToPro: () => {
         set({ isPro: true });
+      },
+
+      // Reset subscription (for testing/dev)
+      resetSubscription: () => {
+        set({
+          isPro: false,
+          dailyDeleteCount: 0,
+          dailyDeleteLimit: 30,
+          lastResetDate: new Date().toDateString(),
+          totalDeleted: 0,
+        });
       },
     }),
     {

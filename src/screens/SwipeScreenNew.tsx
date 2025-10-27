@@ -43,6 +43,7 @@ export function SwipeScreenNew(props: any) {
   const dailyDeleteLimit = useSubscriptionStore((s) => s.dailyDeleteLimit);
   const incrementDeleteCount = useSubscriptionStore.getState().incrementDeleteCount;
   const upgradeToPro = useSubscriptionStore.getState().upgradeToPro;
+  const resetSubscription = useSubscriptionStore.getState().resetSubscription;
 
   // Get functions from store - these are stable references
   const setPhotos = usePhotoStore.getState().setPhotos;
@@ -287,6 +288,20 @@ export function SwipeScreenNew(props: any) {
               )}
 
               <View style={styles.headerRight}>
+                {/* DEV: Reset Button */}
+                {dailyDeleteCount >= dailyDeleteLimit && !isPro && (
+                  <Pressable
+                    onPress={() => {
+                      resetSubscription();
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                    }}
+                    style={styles.resetButton}
+                  >
+                    <Ionicons name="refresh" size={16} color="#EF4444" />
+                    <Text style={styles.resetText}>Reset</Text>
+                  </Pressable>
+                )}
+
                 {/* Pro Badge */}
                 {isPro && (
                   <View style={styles.proBadge}>
@@ -299,7 +314,7 @@ export function SwipeScreenNew(props: any) {
                 {!isPro && (
                   <View style={styles.freemiumCounter}>
                     <Text style={styles.freemiumText}>
-                      {dailyDeleteLimit - dailyDeleteCount} igjen
+                      {Math.max(0, dailyDeleteLimit - dailyDeleteCount)} igjen
                     </Text>
                   </View>
                 )}
@@ -830,6 +845,23 @@ const styles = StyleSheet.create({
   freemiumText: {
     color: "#1E40AF",
     fontSize: 12,
+    fontWeight: "700",
+  },
+  resetButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(239, 68, 68, 0.1)",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 100,
+    gap: 4,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: "#EF4444",
+  },
+  resetText: {
+    color: "#EF4444",
+    fontSize: 11,
     fontWeight: "700",
   },
   hintText: {
