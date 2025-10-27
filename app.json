@@ -26,7 +26,7 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.fjaern.app",
+      "bundleIdentifier": "no.fjaern.app",
       "buildNumber": "1",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Fjærn trenger tilgang til bildene dine for å hjelpe deg med å rydde og frigjøre lagringsplass. Alle bilder analyseres lokalt på enheten din - ingenting sendes til internett.",
@@ -35,7 +35,7 @@
     },
     "android": {
       "edgeToEdgeEnabled": true,
-      "package": "com.fjaern.app",
+      "package": "no.fjaern.app",
       "versionCode": 1,
       "permissions": [
         "READ_MEDIA_IMAGES",
