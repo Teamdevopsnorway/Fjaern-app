@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { View, Text, Dimensions, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
   interpolate,
   Extrapolation,
   runOnJS,
@@ -16,8 +17,8 @@ import * as Haptics from "expo-haptics";
 import { Photo } from "../types/photo";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
-const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
-const ROTATION_ANGLE = 30;
+const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.25;
+const ROTATION_ANGLE = 25;
 
 interface SwipeCardProps {
   photo: Photo;
@@ -36,46 +37,64 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({
 }) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
+  const scale = useSharedValue(isTop ? 1 : 0.95 - index * 0.02);
+  const cardOpacity = useSharedValue(isTop ? 1 : 0.7 - index * 0.2);
   const isSwiping = useSharedValue(false);
+  const hasTriggeredHaptic = useSharedValue(false);
 
-  const triggerHaptic = () => {
+  // Animate cards into position smoothly when they change
+  useEffect(() => {
+    scale.value = withSpring(isTop ? 1 : 0.95 - index * 0.02, {
+      damping: 20,
+      stiffness: 200,
+    });
+    cardOpacity.value = withTiming(isTop ? 1 : 0.7 - index * 0.2, {
+      duration: 150,
+    });
+  }, [isTop, index]);
+
+  const triggerHaptic = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  };
+  }, []);
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
       isSwiping.value = true;
+      hasTriggeredHaptic.value = false;
     })
     .onUpdate((event) => {
-      translateX.value = event.translationX;
-      translateY.value = event.translationY;
+      if (!isTop) return;
 
-      // Haptic feedback at threshold
-      if (
-        (Math.abs(event.translationX) > SWIPE_THRESHOLD / 2 && Math.abs(event.translationX) < SWIPE_THRESHOLD / 2 + 10)
-      ) {
+      translateX.value = event.translationX;
+      translateY.value = event.translationY * 0.5;
+
+      // Haptic feedback at threshold (only once)
+      if (!hasTriggeredHaptic.value && Math.abs(event.translationX) > SWIPE_THRESHOLD) {
+        hasTriggeredHaptic.value = true;
         runOnJS(triggerHaptic)();
       }
     })
     .onEnd((event) => {
+      if (!isTop) return;
+
       isSwiping.value = false;
 
       if (event.translationX > SWIPE_THRESHOLD) {
-        // Swipe right - Keep
-        translateX.value = withSpring(SCREEN_WIDTH * 1.5, { damping: 20 }, () => {
+        // Swipe right - Keep (faster animation)
+        translateX.value = withTiming(SCREEN_WIDTH * 1.3, { duration: 200 }, () => {
           runOnJS(onSwipeRight)();
         });
         runOnJS(Haptics.notificationAsync)(Haptics.NotificationFeedbackType.Success);
       } else if (event.translationX < -SWIPE_THRESHOLD) {
-        // Swipe left - Delete
-        translateX.value = withSpring(-SCREEN_WIDTH * 1.5, { damping: 20 }, () => {
+        // Swipe left - Delete (faster animation)
+        translateX.value = withTiming(-SCREEN_WIDTH * 1.3, { duration: 200 }, () => {
           runOnJS(onSwipeLeft)();
         });
         runOnJS(Haptics.notificationAsync)(Haptics.NotificationFeedbackType.Success);
       } else {
-        // Return to center
-        translateX.value = withSpring(0);
-        translateY.value = withSpring(0);
+        // Return to center (snappy spring)
+        translateX.value = withSpring(0, { damping: 15, stiffness: 150 });
+        translateY.value = withSpring(0, { damping: 15, stiffness: 150 });
       }
     });
 
@@ -94,9 +113,7 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({
       Extrapolation.CLAMP
     );
 
-    // Scale effect for cards underneath
-    const scale = isTop ? 1 : 0.95 - index * 0.02;
-    const cardOpacity = isTop ? 1 : 0.7 - index * 0.2;
+    // Dynamic card position for stack effect
     const cardTranslateY = isTop ? 0 : -index * 10;
 
     return {
@@ -104,9 +121,9 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({
         { translateX: isTop ? translateX.value : 0 },
         { translateY: isTop ? translateY.value : cardTranslateY },
         { rotate: `${isTop ? rotation : 0}deg` },
-        { scale },
+        { scale: scale.value },
       ],
-      opacity: isTop ? opacity : cardOpacity,
+      opacity: isTop ? opacity : cardOpacity.value,
       zIndex: isTop ? 1000 : 1000 - index,
     };
   });

@@ -71,8 +71,6 @@ export function SwipeScreenNew(props: any) {
         setCurrentMilestone(result.milestoneNumber);
         setShowCelebration(true);
       }
-
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
   };
 
@@ -80,7 +78,6 @@ export function SwipeScreenNew(props: any) {
     const photo = getCurrentPhoto();
     if (photo) {
       markToKeep(photo);
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
   };
 
