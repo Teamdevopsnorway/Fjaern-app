@@ -7,7 +7,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { TrollAvatar } from "./TrollAvatar";
@@ -57,10 +56,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     <Modal
       visible={visible}
       transparent={true}
-      animationType="fade"
+      animationType="slide"
       onRequestClose={handleClose}
     >
-      <BlurView intensity={90} tint="dark" style={styles.overlay}>
+      <View style={styles.overlay}>
         <Animated.View style={[styles.content, animatedStyle]}>
           <LinearGradient
             colors={["#E8F4F8", "#B8D4E0"]}
@@ -222,7 +221,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
             </ScrollView>
           </LinearGradient>
         </Animated.View>
-      </BlurView>
+      </View>
     </Modal>
   );
 };
