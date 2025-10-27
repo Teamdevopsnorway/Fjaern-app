@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   hero: {
     alignItems: "center",
-    marginBottom: 48,
+    marginBottom: 32,
   },
   trollAvatarContainer: {
     marginBottom: 24,
@@ -128,13 +128,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   features: {
-    flex: 1,
-    gap: 16,
+    gap: 12,
+    marginBottom: 20,
   },
   featureCard: {
     backgroundColor: "rgba(255, 255, 255, 0.85)",
     borderRadius: 16,
-    padding: 24,
+    padding: 20,
     flexDirection: "row",
     borderWidth: 2,
     borderColor: "rgba(44, 95, 124, 0.1)",
@@ -158,22 +158,22 @@ const styles = StyleSheet.create({
   },
   featureTitle: {
     color: "#2C5F7C",
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "700",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   featureDescription: {
     color: "#5A8BA3",
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 13,
+    lineHeight: 18,
     fontWeight: "500",
   },
   button: {
     backgroundColor: "#2C5F7C",
     borderRadius: 16,
-    paddingVertical: 20,
+    paddingVertical: 18,
     alignItems: "center",
-    marginTop: 24,
+    marginTop: 8,
     shadowColor: "#2C5F7C",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
@@ -187,9 +187,9 @@ const styles = StyleSheet.create({
   },
   disclaimer: {
     color: "#2C5F7C",
-    fontSize: 12,
+    fontSize: 11,
     opacity: 0.7,
     textAlign: "center",
-    marginTop: 16,
+    marginTop: 12,
   },
 });
