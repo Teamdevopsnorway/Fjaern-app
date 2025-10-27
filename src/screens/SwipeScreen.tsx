@@ -15,17 +15,16 @@ function SwipeScreenComponent(props: any) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
 
-  const {
-    allPhotos,
-    currentIndex,
-    setPhotos,
-    markToDelete,
-    markToKeep,
-    undoLastAction,
-    getCurrentPhoto,
-    getProgress,
-    photosToDelete,
-  } = usePhotoStore();
+  // Use individual selectors to avoid infinite loops
+  const allPhotos = usePhotoStore((s) => s.allPhotos);
+  const currentIndex = usePhotoStore((s) => s.currentIndex);
+  const setPhotos = usePhotoStore((s) => s.setPhotos);
+  const markToDelete = usePhotoStore((s) => s.markToDelete);
+  const markToKeep = usePhotoStore((s) => s.markToKeep);
+  const undoLastAction = usePhotoStore((s) => s.undoLastAction);
+  const getCurrentPhoto = usePhotoStore((s) => s.getCurrentPhoto);
+  const getProgress = usePhotoStore((s) => s.getProgress);
+  const photosToDelete = usePhotoStore((s) => s.photosToDelete);
 
   useEffect(() => {
     initializePhotos();

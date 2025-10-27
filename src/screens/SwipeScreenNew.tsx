@@ -27,28 +27,26 @@ export function SwipeScreenNew(props: any) {
   const [showPaywall, setShowPaywall] = useState(false);
   const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
 
-  const {
-    allPhotos,
-    currentIndex,
-    setPhotos,
-    markToDelete,
-    markToKeep,
-    undoLastAction,
-    getCurrentPhoto,
-    getProgress,
-    photosToDelete,
-  } = usePhotoStore();
+  // Use individual selectors for photoStore to avoid infinite loops
+  const allPhotos = usePhotoStore((s) => s.allPhotos);
+  const currentIndex = usePhotoStore((s) => s.currentIndex);
+  const setPhotos = usePhotoStore((s) => s.setPhotos);
+  const markToDelete = usePhotoStore((s) => s.markToDelete);
+  const markToKeep = usePhotoStore((s) => s.markToKeep);
+  const undoLastAction = usePhotoStore((s) => s.undoLastAction);
+  const getCurrentPhoto = usePhotoStore((s) => s.getCurrentPhoto);
+  const getProgress = usePhotoStore((s) => s.getProgress);
+  const photosToDelete = usePhotoStore((s) => s.photosToDelete);
 
-  const {
-    currentStreak,
-    todaysPhotosDeleted,
-    dailyGoal,
-    incrementPhotosCleaned,
-    updateStreak,
-    resetDailyStats,
-    getTodaySpaceSavedFormatted,
-    getDailyProgress,
-  } = useGamificationStore();
+  // Use individual selectors for gamificationStore to avoid infinite loops
+  const currentStreak = useGamificationStore((s) => s.currentStreak);
+  const todaysPhotosDeleted = useGamificationStore((s) => s.todaysPhotosDeleted);
+  const dailyGoal = useGamificationStore((s) => s.dailyGoal);
+  const incrementPhotosCleaned = useGamificationStore((s) => s.incrementPhotosCleaned);
+  const updateStreak = useGamificationStore((s) => s.updateStreak);
+  const resetDailyStats = useGamificationStore((s) => s.resetDailyStats);
+  const getTodaySpaceSavedFormatted = useGamificationStore((s) => s.getTodaySpaceSavedFormatted);
+  const getDailyProgress = useGamificationStore((s) => s.getDailyProgress);
 
   // Use individual selectors to avoid infinite loops
   const incrementDeleteCount = useSubscriptionStore((s) => s.incrementDeleteCount);

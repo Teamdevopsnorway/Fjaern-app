@@ -10,7 +10,9 @@ interface DailyGoalSelectorProps {
 const GOAL_OPTIONS = [0, 10, 20, 30, 50, 100];
 
 export const DailyGoalSelector: React.FC<DailyGoalSelectorProps> = ({ onClose }) => {
-  const { dailyGoal, setDailyGoal } = useGamificationStore();
+  // Use individual selectors to avoid infinite loops
+  const dailyGoal = useGamificationStore((s) => s.dailyGoal);
+  const setDailyGoal = useGamificationStore((s) => s.setDailyGoal);
 
   const handleSelectGoal = (goal: number) => {
     setDailyGoal(goal);

@@ -25,7 +25,10 @@ export function ReviewScreenNew(props: any) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const { photosToDelete, stats, finalizeDeletes } = usePhotoStore();
+  // Use individual selectors to avoid infinite loops
+  const photosToDelete = usePhotoStore((s) => s.photosToDelete);
+  const stats = usePhotoStore((s) => s.stats);
+  const finalizeDeletes = usePhotoStore((s) => s.finalizeDeletes);
 
   const handleDeleteAll = async () => {
     setShowConfirmModal(false);
