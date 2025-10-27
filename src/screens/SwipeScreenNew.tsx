@@ -212,7 +212,7 @@ export function SwipeScreenNew(props: any) {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#FEF3C7", "#FCD34D", "#F59E0B"]}
+        colors={["#FFFFFF", "#EF4444", "#1E40AF"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradient}
@@ -267,7 +267,7 @@ export function SwipeScreenNew(props: any) {
                 {/* Daily goal progress */}
                 {dailyGoal > 0 && (
                   <View style={styles.goalBadge}>
-                    <Ionicons name="flag" size={14} color="#F59E0B" />
+                    <Ionicons name="flag" size={14} color="#EF4444" />
                     <Text style={styles.goalText}>
                       {todaysPhotosDeleted}/{dailyGoal}
                     </Text>
@@ -570,16 +570,16 @@ const styles = StyleSheet.create({
   goalText: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#F59E0B",
+    color: "#DC2626",
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#92400E",
+    color: "#DC2626",
   },
   headerSubtitle: {
     fontSize: 14,
-    color: "#78350F",
+    color: "#1E40AF",
     marginTop: 4,
   },
   deleteCounter: {
@@ -611,7 +611,7 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#92400E",
+    backgroundColor: "#1E40AF",
     borderRadius: 100,
   },
   cardStack: {
