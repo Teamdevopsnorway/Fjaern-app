@@ -22,6 +22,9 @@ const IMAGE_SIZE = (SCREEN_WIDTH - 48) / 3;
 
 export function ReviewScreenNew(props: any) {
   const navigation = props.navigation;
+  const route = props.route;
+  const fromCategories = route?.params?.fromCategories || false;
+
   const [isDeleting, setIsDeleting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -41,7 +44,13 @@ export function ReviewScreenNew(props: any) {
       if (success) {
         await finalizeDeletes();
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        navigation.navigate("Swipe");
+
+        // If we came from categories, go back to categories screen
+        if (fromCategories) {
+          navigation.navigate("Categories");
+        } else {
+          navigation.navigate("SwipeNew");
+        }
       } else {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       }

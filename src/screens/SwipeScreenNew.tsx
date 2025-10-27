@@ -123,7 +123,9 @@ export function SwipeScreenNew(props: any) {
 
   const handleReview = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    navigation.navigate("ReviewNew");
+    navigation.navigate("ReviewNew", {
+      fromCategories: fromCategories,
+    });
   };
 
   const handleRequestPermission = async () => {
