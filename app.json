@@ -1,11 +1,17 @@
 {
   "expo": {
-    "name": "vibecode",
-    "slug": "vibecode",
-    "scheme": "vibecode",
+    "name": "Fjærn",
+    "slug": "fjaern",
+    "scheme": "fjaern",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#EF4444"
+    },
     "newArchEnabled": true,
     "plugins": [
       "react-native-iap",
@@ -19,12 +25,24 @@
       ]
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.vibecode.app"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.fjaern.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Fjærn trenger tilgang til bildene dine for å hjelpe deg med å rydde og frigjøre lagringsplass. Alle bilder analyseres lokalt på enheten din - ingenting sendes til internett.",
+        "NSPhotoLibraryAddUsageDescription": "Fjærn trenger tilgang for å kunne slette bilder du har valgt å fjerne."
+      }
     },
     "android": {
       "edgeToEdgeEnabled": true,
-      "package": "com.vibecode.app"
-    }
+      "package": "com.fjaern.app",
+      "versionCode": 1,
+      "permissions": [
+        "READ_MEDIA_IMAGES",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "privacy": "public"
   }
 }
