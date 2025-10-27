@@ -6,9 +6,9 @@ import * as Haptics from "expo-haptics";
 import {
   getSubscriptionPackages,
   purchasePackage,
-  restorePurchases
+  restorePurchases,
+  type PurchasesPackage
 } from "../utils/revenueCat";
-import type { PurchasesPackage } from "react-native-purchases";
 
 interface PaywallModalProps {
   visible: boolean;
