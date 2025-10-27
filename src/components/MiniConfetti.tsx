@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
   withSpring,
   Easing,
+  runOnJS,
 } from "react-native-reanimated";
 
 interface MiniConfettiProps {
@@ -67,9 +68,10 @@ const Particle: React.FC<ParticleProps> = ({ index, onComplete }) => {
     opacity.value = withTiming(0, {
       duration: 600,
       easing: Easing.out(Easing.ease),
-    }, () => {
-      if (onComplete) {
-        onComplete();
+    }, (finished) => {
+      "worklet";
+      if (finished && onComplete) {
+        runOnJS(onComplete)();
       }
     });
   }, []);
