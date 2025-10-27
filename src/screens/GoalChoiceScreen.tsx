@@ -38,7 +38,7 @@ export function GoalChoiceScreen(props: any) {
           {/* Hero Section */}
           <View style={styles.hero}>
             <View style={styles.trollAvatarContainer}>
-              <TrollAvatar size={90} animate={true} />
+              <TrollAvatar size={75} animate={true} />
             </View>
             <Text style={styles.title}>Klar til å Rydde?</Text>
             <Text style={styles.subtitle}>
@@ -57,7 +57,7 @@ export function GoalChoiceScreen(props: any) {
                 style={styles.cardGradient}
               >
                 <View style={styles.iconContainer}>
-                  <Ionicons name="flag" size={40} color="#DC2626" />
+                  <Ionicons name="flag" size={32} color="#DC2626" />
                 </View>
                 <Text style={styles.choiceTitle}>Sett Dagsmål</Text>
                 <Text style={styles.choiceDescription}>
@@ -78,14 +78,14 @@ export function GoalChoiceScreen(props: any) {
                 style={styles.cardGradient}
               >
                 <View style={styles.iconContainer}>
-                  <Ionicons name="play-circle" size={40} color="#1E40AF" />
+                  <Ionicons name="play-circle" size={32} color="#1E40AF" />
                 </View>
                 <Text style={styles.choiceTitle}>Start Nå</Text>
                 <Text style={styles.choiceDescription}>
                   Hopp rett inn i ryddingen uten mål. Du kan sette et mål senere!
                 </Text>
                 <View style={styles.arrowContainer}>
-                  <Ionicons name="arrow-forward" size={20} color="#1E40AF" />
+                  <Ionicons name="arrow-forward" size={18} color="#1E40AF" />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -124,17 +124,17 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingTop: 20,
-    paddingBottom: 30,
-    paddingHorizontal: 24,
+    paddingTop: 10,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
     justifyContent: "space-between",
   },
   hero: {
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 16,
   },
   trollAvatarContainer: {
-    marginBottom: 16,
+    marginBottom: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.15,
@@ -143,92 +143,92 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#1F2937",
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 6,
     textAlign: "center",
   },
   subtitle: {
     color: "#4B5563",
-    fontSize: 15,
+    fontSize: 14,
     textAlign: "center",
-    lineHeight: 22,
-    paddingHorizontal: 16,
+    lineHeight: 20,
+    paddingHorizontal: 12,
   },
   choices: {
-    gap: 16,
+    gap: 12,
   },
   choiceCard: {
-    borderRadius: 24,
+    borderRadius: 20,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
+    shadowRadius: 8,
+    elevation: 4,
   },
   cardGradient: {
-    borderRadius: 24,
-    padding: 24,
+    borderRadius: 20,
+    padding: 18,
     alignItems: "center",
     borderWidth: 2,
     borderColor: "rgba(255, 255, 255, 0.7)",
-    minHeight: 220,
+    minHeight: 180,
     justifyContent: "center",
   },
   iconContainer: {
-    width: 80,
-    height: 80,
+    width: 64,
+    height: 64,
     backgroundColor: "white",
-    borderRadius: 40,
+    borderRadius: 32,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 16,
+    marginBottom: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 4,
   },
   choiceTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#1F2937",
-    marginBottom: 8,
+    marginBottom: 6,
     textAlign: "center",
   },
   choiceDescription: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#6B7280",
     textAlign: "center",
-    lineHeight: 20,
-    marginBottom: 12,
-    paddingHorizontal: 8,
+    lineHeight: 18,
+    marginBottom: 10,
+    paddingHorizontal: 6,
   },
   badge: {
     backgroundColor: "#DC2626",
-    paddingHorizontal: 14,
-    paddingVertical: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
     borderRadius: 100,
   },
   badgeText: {
     color: "white",
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "bold",
   },
   arrowContainer: {
     backgroundColor: "rgba(30, 64, 175, 0.1)",
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
   },
   tip: {
-    fontSize: 13,
+    fontSize: 12,
     color: "#6B7280",
     textAlign: "center",
     fontStyle: "italic",
-    marginTop: 16,
+    marginTop: 12,
     paddingHorizontal: 16,
   },
   modalOverlay: {
