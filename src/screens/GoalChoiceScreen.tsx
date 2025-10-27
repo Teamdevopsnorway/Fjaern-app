@@ -1,29 +1,20 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet, Modal } from "react-native";
+import React from "react";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { TrollAvatar } from "../components/TrollAvatar";
-import { DailyGoalSelector } from "../components/DailyGoalSelector";
 
 export function GoalChoiceScreen(props: any) {
-  const [showGoalSelector, setShowGoalSelector] = useState(false);
-
-  const handleStartNow = () => {
+  const handleSmartCleanup = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    props.navigation.replace("Swipe");
+    props.navigation.replace("Categories");
   };
 
-  const handleSetGoal = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setShowGoalSelector(true);
-  };
-
-  const handleGoalSelected = () => {
-    setShowGoalSelector(false);
-    // Navigate to swipe after goal is set
-    props.navigation.replace("Swipe");
+  const handleManualSwipe = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    props.navigation.replace("SwipeNew");
   };
 
   return (
@@ -43,14 +34,14 @@ export function GoalChoiceScreen(props: any) {
             </View>
             <Text style={styles.title}>Klar til å Rydde?</Text>
             <Text style={styles.subtitle}>
-              Vil du sette et dagsmål først, eller starte med en gang?
+              Velg hvordan du vil rydde bildegalleri ditt
             </Text>
           </View>
 
           {/* Choice Cards */}
           <View style={styles.choices}>
-            {/* Set Daily Goal */}
-            <Pressable onPress={handleSetGoal} style={styles.choiceCard}>
+            {/* Smart Cleanup - NEW! */}
+            <Pressable onPress={handleSmartCleanup} style={styles.choiceCard}>
               <LinearGradient
                 colors={["#FFFFFF", "#FEE2E2"]}
                 start={{ x: 0, y: 0 }}
@@ -58,20 +49,20 @@ export function GoalChoiceScreen(props: any) {
                 style={styles.cardGradient}
               >
                 <View style={styles.iconContainer}>
-                  <Ionicons name="flag" size={32} color="#DC2626" />
+                  <Ionicons name="sparkles" size={32} color="#DC2626" />
                 </View>
-                <Text style={styles.choiceTitle}>Sett Dagsmål</Text>
+                <Text style={styles.choiceTitle}>Smart Opprydding</Text>
                 <Text style={styles.choiceDescription}>
-                  Velg hvor mange bilder du vil rydde i dag og få ekstra confetti når du når målet! 🎉
+                  La AI finne duplikater, skjermbilder og unødvendige bilder automatisk! 🤖✨
                 </Text>
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>Anbefalt</Text>
+                  <Text style={styles.badgeText}>NY! Anbefalt</Text>
                 </View>
               </LinearGradient>
             </Pressable>
 
-            {/* Start Now */}
-            <Pressable onPress={handleStartNow} style={styles.choiceCard}>
+            {/* Manual Swipe */}
+            <Pressable onPress={handleManualSwipe} style={styles.choiceCard}>
               <LinearGradient
                 colors={["#DBEAFE", "#FFFFFF"]}
                 start={{ x: 0, y: 0 }}
@@ -79,11 +70,11 @@ export function GoalChoiceScreen(props: any) {
                 style={styles.cardGradient}
               >
                 <View style={styles.iconContainer}>
-                  <Ionicons name="play-circle" size={32} color="#1E40AF" />
+                  <Ionicons name="hand-left" size={32} color="#1E40AF" />
                 </View>
-                <Text style={styles.choiceTitle}>Start Nå</Text>
+                <Text style={styles.choiceTitle}>Manuell Swipe</Text>
                 <Text style={styles.choiceDescription}>
-                  Hopp rett inn i ryddingen uten mål. Du kan sette et mål senere!
+                  Swipe gjennom bilder selv og bestem hva du vil beholde eller slette
                 </Text>
                 <View style={styles.arrowContainer}>
                   <Ionicons name="arrow-forward" size={18} color="#1E40AF" />
@@ -93,25 +84,11 @@ export function GoalChoiceScreen(props: any) {
           </View>
 
           <Text style={styles.tip}>
-            💡 Tips: Et dagsmål hjelper deg holde motivasjonen!
+            💡 Tips: Smart Opprydding er raskest for store bildegalleri!
           </Text>
         </View>
         </SafeAreaView>
       </LinearGradient>
-
-      {/* Daily Goal Selector Modal */}
-      <Modal
-        visible={showGoalSelector}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setShowGoalSelector(false)}
-      >
-        <Pressable style={styles.modalOverlay} onPress={() => setShowGoalSelector(false)}>
-          <Pressable onPress={(e) => e.stopPropagation()}>
-            <DailyGoalSelector onClose={handleGoalSelected} />
-          </Pressable>
-        </Pressable>
-      </Modal>
     </View>
   );
 }
@@ -235,11 +212,5 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     marginTop: 12,
     paddingHorizontal: 16,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });

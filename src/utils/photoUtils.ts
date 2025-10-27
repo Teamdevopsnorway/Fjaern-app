@@ -42,6 +42,7 @@ export const loadPhotos = async (): Promise<Photo[]> => {
         modificationTime: asset.modificationTime,
         duration: asset.duration,
         mediaType: asset.mediaType === MediaLibrary.MediaType.photo ? "photo" : "video",
+        mediaSubtypes: (asset as any).mediaSubtypes || [], // Include screenshot detection
         fileSize: undefined, // Will be fetched on-demand when needed
       }));
 
