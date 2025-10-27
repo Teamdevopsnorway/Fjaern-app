@@ -5,17 +5,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { usePhotoStore } from "../state/photoStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
-import { RootStackParamList } from "../navigation/AppNavigator";
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, "Swipe">;
-
-export const SwipeScreen: React.FC = () => {
-  const navigation = useNavigation<NavigationProp>();
+export const SwipeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);

@@ -4,6 +4,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AppNavigator } from "./src/navigation/AppNavigator";
+import "./src/utils/appVersion";
+
+// App v2 - Fixed navigation context
 
 /*
 IMPORTANT NOTICE: DO NOT REMOVE
@@ -27,18 +30,6 @@ const openai_api_key = Constants.expoConfig.extra.apikey;
 */
 
 export default function App() {
-  const [isReady, setIsReady] = React.useState(false);
-
-  React.useEffect(() => {
-    // Small delay to ensure everything is initialized
-    const timer = setTimeout(() => setIsReady(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!isReady) {
-    return null;
-  }
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
