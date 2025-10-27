@@ -10,6 +10,12 @@ export function WelcomeScreenNew(props: any) {
   const currentStreak = useGamificationStore((s) => s.currentStreak);
   const longestStreak = useGamificationStore((s) => s.longestStreak);
   const totalPhotosCleaned = useGamificationStore((s) => s.totalPhotosCleaned);
+  const updateStreak = useGamificationStore.getState().updateStreak;
+
+  // Initialize streak on mount
+  React.useEffect(() => {
+    updateStreak();
+  }, []);
 
   const handleGetStarted = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -34,8 +40,8 @@ export function WelcomeScreenNew(props: any) {
             <Text style={styles.subtitle}>Det søteste trollet som hjelper deg slette bilder du ikke trenger 🗑️✨</Text>
           </View>
 
-          {/* Streak Badge - Show if user has a streak */}
-          {currentStreak > 0 && (
+          {/* Streak Badge - Show if user has used the app */}
+          {currentStreak > 0 && totalPhotosCleaned > 0 && (
             <View style={styles.streakBanner}>
               <View style={styles.streakContent}>
                 <Ionicons name="flame" size={32} color="#FF6B35" />
