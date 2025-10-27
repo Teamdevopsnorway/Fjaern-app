@@ -212,12 +212,12 @@ export function SwipeScreenNew(props: any) {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#FFFFFF", "#FEE2E2", "#DBEAFE"]}
+        colors={["#FEF3C7", "#FCD34D", "#F59E0B"]}
         start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        end={{ x: 0, y: 1 }}
         style={styles.gradient}
       >
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
           {/* Header with Stats */}
           <View style={styles.header}>
             <View style={styles.headerContent}>
@@ -254,11 +254,11 @@ export function SwipeScreenNew(props: any) {
                 {todaysPhotosDeleted > 0 && (
                   <>
                     <View style={styles.statBadge}>
-                      <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
+                      <Ionicons name="checkmark-circle" size={14} color="#10B981" />
                       <Text style={styles.statText}>{todaysPhotosDeleted} i dag</Text>
                     </View>
                     <View style={styles.statBadge}>
-                      <Ionicons name="cloud-upload" size={14} color="#2196F3" />
+                      <Ionicons name="cloud-upload" size={14} color="#3B82F6" />
                       <Text style={styles.statText}>{getTodaySpaceSavedFormatted()} spart</Text>
                     </View>
                   </>
@@ -267,7 +267,7 @@ export function SwipeScreenNew(props: any) {
                 {/* Daily goal progress */}
                 {dailyGoal > 0 && (
                   <View style={styles.goalBadge}>
-                    <Ionicons name="flag" size={14} color="#FFA000" />
+                    <Ionicons name="flag" size={14} color="#F59E0B" />
                     <Text style={styles.goalText}>
                       {todaysPhotosDeleted}/{dailyGoal}
                     </Text>
@@ -469,8 +469,9 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 20,
-    paddingTop: 16,
+    paddingTop: 8,
     paddingBottom: 16,
+    backgroundColor: "transparent",
   },
   headerContent: {
     flexDirection: "row",
@@ -494,16 +495,18 @@ const styles = StyleSheet.create({
   streakBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
     borderRadius: 100,
     paddingHorizontal: 12,
     paddingVertical: 6,
     gap: 4,
     shadowColor: "#FF6B35",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 3,
+    borderWidth: 2,
+    borderColor: "#FF6B35",
   },
   streakText: {
     fontSize: 14,
@@ -518,16 +521,21 @@ const styles = StyleSheet.create({
   statBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
     borderRadius: 100,
     paddingHorizontal: 12,
     paddingVertical: 6,
     gap: 6,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   statText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#1E40AF",
+    color: "#1F2937",
   },
   proUpgradeBadge: {
     flexDirection: "row",
@@ -548,41 +556,46 @@ const styles = StyleSheet.create({
   goalBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255, 160, 0, 0.2)",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
     borderRadius: 100,
     paddingHorizontal: 12,
     paddingVertical: 6,
     gap: 6,
-    borderWidth: 1,
-    borderColor: "#FFA000",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   goalText: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#E65100",
+    color: "#F59E0B",
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#DC2626",
+    color: "#92400E",
   },
   headerSubtitle: {
     fontSize: 14,
-    color: "#1E40AF",
+    color: "#78350F",
     marginTop: 4,
   },
   deleteCounter: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
     borderRadius: 100,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    shadowColor: "#000",
+    shadowColor: "#EF4444",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 3,
+    borderWidth: 2,
+    borderColor: "#EF4444",
   },
   deleteCountText: {
     marginLeft: 8,
@@ -592,13 +605,13 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 8,
-    backgroundColor: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
     borderRadius: 100,
     overflow: "hidden",
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#2C5F7C",
+    backgroundColor: "#92400E",
     borderRadius: 100,
   },
   cardStack: {
