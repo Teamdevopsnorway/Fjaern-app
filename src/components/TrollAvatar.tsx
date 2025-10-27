@@ -70,7 +70,7 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           cy="65"
           rx="30"
           ry="32"
-          fill="#8B7355"
+          fill="#7B9DC8"
         />
 
         {/* Belly - lighter */}
@@ -79,7 +79,7 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           cy="72"
           rx="18"
           ry="20"
-          fill="#A89482"
+          fill="#B0C4DE"
         />
 
         {/* Head - big round head */}
@@ -87,7 +87,7 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           cx="50"
           cy="38"
           r="26"
-          fill="#8B7355"
+          fill="#7B9DC8"
         />
 
         {/* Big ears */}
@@ -96,14 +96,14 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           cy="38"
           rx="8"
           ry="12"
-          fill="#8B7355"
+          fill="#7B9DC8"
         />
         <Ellipse
           cx="76"
           cy="38"
           rx="8"
           ry="12"
-          fill="#8B7355"
+          fill="#7B9DC8"
         />
 
         {/* Inner ears - pink */}
@@ -214,7 +214,7 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           cy="47"
           rx="8"
           ry="10"
-          fill="#6B5D4F"
+          fill="#5A8AB8"
         />
 
         {/* Nostrils */}
@@ -257,28 +257,28 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
         {/* Body hair/fur texture */}
         <Path
           d="M 30 60 Q 28 65, 26 70"
-          stroke="#6B5D4F"
+          stroke="#5A8AB8"
           strokeWidth="2"
           fill="none"
           opacity="0.4"
         />
         <Path
           d="M 35 62 Q 33 68, 31 74"
-          stroke="#6B5D4F"
+          stroke="#5A8AB8"
           strokeWidth="2"
           fill="none"
           opacity="0.4"
         />
         <Path
           d="M 65 62 Q 67 68, 69 74"
-          stroke="#6B5D4F"
+          stroke="#5A8AB8"
           strokeWidth="2"
           fill="none"
           opacity="0.4"
         />
         <Path
           d="M 70 60 Q 72 65, 74 70"
-          stroke="#6B5D4F"
+          stroke="#5A8AB8"
           strokeWidth="2"
           fill="none"
           opacity="0.4"
@@ -290,10 +290,10 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           cy="68"
           rx="7"
           ry="16"
-          fill="#8B7355"
+          fill="#7B9DC8"
           transform="rotate(-20 24 68)"
         />
-        <Circle cx="20" cy="82" r="5" fill="#6B5D4F" />
+        <Circle cx="20" cy="82" r="5" fill="#5A8AB8" />
 
         {/* Right arm and hand - animated waving */}
         <AnimatedG
@@ -305,10 +305,10 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
             cy="68"
             rx="7"
             ry="16"
-            fill="#8B7355"
+            fill="#7B9DC8"
             transform="rotate(20 76 68)"
           />
-          <Circle cx="80" cy="82" r="5" fill="#6B5D4F" />
+          <Circle cx="80" cy="82" r="5" fill="#5A8AB8" />
         </AnimatedG>
 
         {/* Feet - big troll feet */}
@@ -317,21 +317,21 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           cy="94"
           rx="11"
           ry="6"
-          fill="#6B5D4F"
+          fill="#5A8AB8"
         />
         <Ellipse
           cx="60"
           cy="94"
           rx="11"
           ry="6"
-          fill="#6B5D4F"
+          fill="#5A8AB8"
         />
 
         {/* Toes */}
-        <Circle cx="36" cy="94" r="2" fill="#5A4D3F" />
-        <Circle cx="44" cy="94" r="2" fill="#5A4D3F" />
-        <Circle cx="56" cy="94" r="2" fill="#5A4D3F" />
-        <Circle cx="64" cy="94" r="2" fill="#5A4D3F" />
+        <Circle cx="36" cy="94" r="2" fill="#4A7AA3" />
+        <Circle cx="44" cy="94" r="2" fill="#4A7AA3" />
+        <Circle cx="56" cy="94" r="2" fill="#4A7AA3" />
+        <Circle cx="64" cy="94" r="2" fill="#4A7AA3" />
       </Svg>
     </Animated.View>
   );
