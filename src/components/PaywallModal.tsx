@@ -4,31 +4,30 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withSequence,
   withTiming,
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
+import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { TrollAvatar } from "./TrollAvatar";
-import { restorePurchases } from "../utils/iapHandler";
 
 interface PaywallModalProps {
   visible: boolean;
   onClose: () => void;
   onUpgrade: () => void;
+  deletedToday: number;
+  limit: number;
 }
 
 export const PaywallModal: React.FC<PaywallModalProps> = ({
   visible,
   onClose,
   onUpgrade,
+  deletedToday,
+  limit,
 }) => {
   const scale = useSharedValue(0);
-
-  // Placeholder values since this modal is not actively used
-  const deletedCount = 0;
-  const freeDeleteLimit = 30;
 
   useEffect(() => {
     if (visible) {
@@ -54,15 +53,6 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     setTimeout(onClose, 200);
   };
 
-  const handleRestore = async () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const success = await restorePurchases();
-    if (success) {
-      // Close paywall after successful restore
-      handleClose();
-    }
-  };
-
   return (
     <Modal
       visible={visible}
@@ -70,7 +60,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
       animationType="fade"
       onRequestClose={handleClose}
     >
-      <View style={styles.overlay}>
+      <BlurView intensity={90} tint="dark" style={styles.overlay}>
         <Animated.View style={[styles.content, animatedStyle]}>
           <LinearGradient
             colors={["#E8F4F8", "#B8D4E0"]}
@@ -91,13 +81,33 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               </View>
 
               {/* Header */}
-              <Text style={styles.title}>Oppgrader til Fjærn Pro</Text>
+              <Text style={styles.title}>Du har nådd dagens grense! 🎉</Text>
               <Text style={styles.subtitle}>
-                Du har ryddet {deletedCount} av {freeDeleteLimit} gratis bilder! 🎉
+                Gratulerer! Du har fjernet {deletedToday} bilder i dag.
               </Text>
 
-              {/* Features */}
-              <View style={styles.featuresContainer}>
+              {/* Stats Card */}
+              <View style={styles.statsCard}>
+                <View style={styles.statRow}>
+                  <Text style={styles.statLabel}>I dag:</Text>
+                  <Text style={styles.statValue}>{deletedToday} / {limit} bilder</Text>
+                </View>
+                <View style={styles.progressBarContainer}>
+                  <View style={styles.progressBarBg}>
+                    <View
+                      style={[
+                        styles.progressBarFill,
+                        { width: `${(deletedToday / limit) * 100}%` }
+                      ]}
+                    />
+                  </View>
+                </View>
+              </View>
+
+              {/* Pro Benefits */}
+              <View style={styles.benefitsContainer}>
+                <Text style={styles.benefitsTitle}>Lås opp Fjærn Pro</Text>
+
                 <View style={styles.featureItem}>
                   <View style={styles.featureIcon}>
                     <Ionicons name="infinite" size={24} color="#2C5F7C" />
@@ -105,31 +115,31 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                   <View style={styles.featureTextContainer}>
                     <Text style={styles.featureTitle}>Ubegrenset Rydding</Text>
                     <Text style={styles.featureDescription}>
-                      Rydd så mange bilder du vil, ingen grenser!
+                      Fjern så mange bilder du vil, når som helst
                     </Text>
                   </View>
                 </View>
 
                 <View style={styles.featureItem}>
                   <View style={styles.featureIcon}>
-                    <Ionicons name="trophy" size={24} color="#FFD700" />
+                    <Ionicons name="sparkles" size={24} color="#8B5CF6" />
                   </View>
                   <View style={styles.featureTextContainer}>
-                    <Text style={styles.featureTitle}>Alle Milepæler</Text>
+                    <Text style={styles.featureTitle}>Full Smart Opprydding</Text>
                     <Text style={styles.featureDescription}>
-                      Få feiring for hver 10., 50., 100. bilde og mer!
+                      AI-drevet duplikat & screenshot deteksjon
                     </Text>
                   </View>
                 </View>
 
                 <View style={styles.featureItem}>
                   <View style={styles.featureIcon}>
-                    <Ionicons name="flash" size={24} color="#FF6B35" />
+                    <Ionicons name="shield-checkmark" size={24} color="#10B981" />
                   </View>
                   <View style={styles.featureTextContainer}>
-                    <Text style={styles.featureTitle}>Prioritert Support</Text>
+                    <Text style={styles.featureTitle}>Ingen Annonser</Text>
                     <Text style={styles.featureDescription}>
-                      Få hjelp raskere med premium support
+                      Helt reklamefri opplevelse
                     </Text>
                   </View>
                 </View>
@@ -141,7 +151,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                   <View style={styles.featureTextContainer}>
                     <Text style={styles.featureTitle}>Støtt Utvikling</Text>
                     <Text style={styles.featureDescription}>
-                      Hjelp oss å lage enda bedre funksjoner!
+                      Hjelp oss lage flere features
                     </Text>
                   </View>
                 </View>
@@ -149,13 +159,41 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
               {/* Pricing */}
               <View style={styles.pricingContainer}>
-                <View style={styles.pricingBadge}>
-                  <Text style={styles.pricingBadgeText}>BEST VERDI</Text>
-                </View>
-                <Text style={styles.price}>99 kr / måned</Text>
-                <Text style={styles.priceDescription}>
-                  Kanseller når som helst. Ingen binding.
-                </Text>
+                <Pressable onPress={handleUpgrade} style={styles.pricingCard}>
+                  <LinearGradient
+                    colors={["#EF4444", "#DC2626"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.pricingGradient}
+                  >
+                    <View style={styles.popularBadge}>
+                      <Text style={styles.popularText}>MEST POPULÆR</Text>
+                    </View>
+                    <Text style={styles.pricingTitle}>Årlig Abonnement</Text>
+                    <View style={styles.priceRow}>
+                      <Text style={styles.priceAmount}>399 kr</Text>
+                      <Text style={styles.priceUnit}>/år</Text>
+                    </View>
+                    <Text style={styles.pricingSavings}>Spar 189 kr (32% rabatt)</Text>
+                    <Text style={styles.pricingSubtext}>~33 kr/måned</Text>
+                  </LinearGradient>
+                </Pressable>
+
+                <Pressable onPress={handleUpgrade} style={styles.pricingCard}>
+                  <LinearGradient
+                    colors={["#3B82F6", "#1E40AF"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.pricingGradient}
+                  >
+                    <Text style={styles.pricingTitle}>Månedlig Abonnement</Text>
+                    <View style={styles.priceRow}>
+                      <Text style={styles.priceAmount}>49 kr</Text>
+                      <Text style={styles.priceUnit}>/måned</Text>
+                    </View>
+                    <Text style={styles.pricingSubtext}>Kanseller når som helst</Text>
+                  </LinearGradient>
+                </Pressable>
               </View>
 
               {/* CTA Button */}
@@ -166,29 +204,25 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                   end={{ x: 1, y: 0 }}
                   style={styles.upgradeGradient}
                 >
-                  <Text style={styles.upgradeButtonText}>Oppgrader til Pro</Text>
-                  <Ionicons name="arrow-forward" size={20} color="white" />
+                  <Text style={styles.upgradeButtonText}>Oppgrader til Pro →</Text>
                 </LinearGradient>
               </Pressable>
 
-              {/* Restore Purchase */}
-              <Pressable onPress={handleRestore} style={styles.restoreButton}>
-                <Text style={styles.restoreText}>Gjenopprett Kjøp</Text>
-              </Pressable>
-
-              {/* Continue browsing button */}
+              {/* Continue Free */}
               <Pressable onPress={handleClose} style={styles.continueButton}>
-                <Text style={styles.continueText}>Fortsett å Bla (Kun Behold)</Text>
+                <Text style={styles.continueText}>
+                  Fortsett i morgen ({limit} bilder/dag gratis)
+                </Text>
               </Pressable>
 
               {/* Terms */}
               <Text style={styles.terms}>
-                Betalingen belastes din App Store-konto. Abonnementet fornyes automatisk med mindre det kanselleres minst 24 timer før periodens slutt.
+                Abonnementet fornyes automatisk. Kanseller når som helst i App Store-innstillinger.
               </Text>
             </ScrollView>
           </LinearGradient>
         </Animated.View>
-      </View>
+      </BlurView>
     </Modal>
   );
 };
@@ -239,8 +273,56 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#5A8BA3",
     textAlign: "center",
-    marginBottom: 32,
+    marginBottom: 24,
     lineHeight: 22,
+  },
+  statsCard: {
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: "rgba(44, 95, 124, 0.2)",
+  },
+  statRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  statLabel: {
+    fontSize: 16,
+    color: "#5A8BA3",
+    fontWeight: "600",
+  },
+  statValue: {
+    fontSize: 18,
+    color: "#2C5F7C",
+    fontWeight: "bold",
+  },
+  progressBarContainer: {
+    marginTop: 8,
+  },
+  progressBarBg: {
+    height: 8,
+    backgroundColor: "rgba(44, 95, 124, 0.2)",
+    borderRadius: 100,
+    overflow: "hidden",
+  },
+  progressBarFill: {
+    height: "100%",
+    backgroundColor: "#3B82F6",
+    borderRadius: 100,
+  },
+  benefitsContainer: {
+    marginBottom: 24,
+  },
+  benefitsTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#2C5F7C",
+    marginBottom: 16,
+    textAlign: "center",
   },
   featuresContainer: {
     gap: 16,
@@ -277,13 +359,72 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   pricingContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    borderRadius: 16,
+    gap: 12,
+    marginBottom: 20,
+  },
+  pricingCard: {
+    borderRadius: 20,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  pricingGradient: {
     padding: 24,
     alignItems: "center",
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: "#2C5F7C",
+    position: "relative",
+  },
+  popularBadge: {
+    position: "absolute",
+    top: 12,
+    right: 12,
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 100,
+  },
+  popularText: {
+    color: "white",
+    fontSize: 10,
+    fontWeight: "800",
+    letterSpacing: 1,
+  },
+  pricingTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "white",
+    marginBottom: 12,
+  },
+  priceRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    marginBottom: 8,
+  },
+  priceAmount: {
+    fontSize: 48,
+    fontWeight: "bold",
+    color: "white",
+  },
+  priceUnit: {
+    fontSize: 18,
+    color: "rgba(255, 255, 255, 0.8)",
+    marginLeft: 4,
+  },
+  pricingSavings: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 100,
+    marginBottom: 4,
+  },
+  pricingSubtext: {
+    fontSize: 14,
+    color: "rgba(255, 255, 255, 0.8)",
   },
   pricingBadge: {
     backgroundColor: "#FF6B35",

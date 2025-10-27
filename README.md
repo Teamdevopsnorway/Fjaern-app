@@ -215,19 +215,32 @@ Using Zustand with AsyncStorage persistence for:
    - Categories har tilbake-knapp til GoalChoice
    - Fullstendig navigasjonsflyt
 
-5. ✅ **Dopamin-Skapende Feedback** (NYE!)
-   - **Distinkte vibrasjoner**: Heavy haptic for "Behold", dobbel-pulse for "Fjærn"
+5. ✅ **Dopamin-Skapende Feedback**
+   - **Distinkte vibrasjoner**: Heavy haptic for "Behold", Medium for "Fjærn"
    - **Mini konfetti**: Liten burst-animasjon ved hver sletting
    - **"Fjærn"-branding**: Konsistent med app-navnet
    - **Satisfying interactions**: Hver handling føles belønende
+
+6. ✅ **Freemium Paywall (NYE!)** 🎯
+   - **30 bilder/dag gratis** - Perfekt for casual brukere
+   - **Elegant paywall modal** - Nordisk design med troll-avatar
+   - **Remaining counter** - Viser gjenstående slettinger i header
+   - **Pro badge** - Gullstjerne for premium brukere
+   - **2 subscription tiers**:
+     - Månedlig: 49 kr/måned
+     - Årlig: 399 kr/år (32% rabatt, ~33 kr/måned)
+   - **Auto-reset** - Teller nullstilles hver dag klokken 00:00
+   - **Persistent tracking** - AsyncStorage for offline state
 
 **Tekniske forbedringer:**
 - `src/utils/photoAnalysis.ts` - Forbedret `findDuplicates()` algoritme
 - `src/screens/WelcomeScreenNew.tsx` - Smart forslag banner med blå gradient
 - `src/screens/CategoriesScreen.tsx` - Navigerer direkte til SwipeScreenNew med back button
-- `src/screens/SwipeScreenNew.tsx` - Conditional header med back button + mini konfetti
-- `src/components/SwipeCard.tsx` - Forbedret haptic feedback (Heavy/Medium+Light)
+- `src/screens/SwipeScreenNew.tsx` - Freemium limit + paywall + Pro badge + mini konfetti
+- `src/components/SwipeCard.tsx` - Forbedret haptic feedback (Heavy/Medium)
 - `src/components/MiniConfetti.tsx` - Ny komponent for burst-animasjon ved sletting
+- `src/components/PaywallModal.tsx` - Vakker freemium paywall med pricing cards
+- `src/state/subscriptionStore.ts` - Zustand store for freemium tracking (NEW!)
 - `src/screens/ReviewScreenNew.tsx` - Smart navigasjon tilbake til kategorier
 
 **Hvorfor dette gjør Fjærn MVP-ready:**
@@ -239,6 +252,7 @@ Using Zustand with AsyncStorage persistence for:
 - ✅ Gamification (streaks, milestones) for retensjon
 - ✅ Intuitiv navigasjon med tilbake-knapper overalt
 - ✅ Dopamin-skapende feedback som gjør rydding gøy!
+- ✅ **Monetization-ready** - Freemium model med in-app subscriptions
 
 ---
 

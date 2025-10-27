@@ -7,11 +7,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { usePhotoStore } from "../state/photoStore";
 import { useGamificationStore } from "../state/gamificationStore";
+import { useSubscriptionStore } from "../state/subscriptionStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { CelebrationModal } from "../components/CelebrationModal";
 import { DailyGoalCelebrationModal } from "../components/DailyGoalCelebrationModal";
 import { TrollAvatar } from "../components/TrollAvatar";
 import { MiniConfetti } from "../components/MiniConfetti";
+import { PaywallModal } from "../components/PaywallModal";
 import { loadPhotos, requestPermissions, getPhotoFileSize } from "../utils/photoUtils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -28,11 +30,19 @@ export function SwipeScreenNew(props: any) {
   const [currentMilestone, setCurrentMilestone] = useState(0);
   const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
   const [showMiniConfetti, setShowMiniConfetti] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   // Use individual selectors for photoStore to avoid infinite loops
   const allPhotos = usePhotoStore((s) => s.allPhotos);
   const currentIndex = usePhotoStore((s) => s.currentIndex);
   const photosToDelete = usePhotoStore((s) => s.photosToDelete);
+
+  // Subscription store
+  const isPro = useSubscriptionStore((s) => s.isPro);
+  const dailyDeleteCount = useSubscriptionStore((s) => s.dailyDeleteCount);
+  const dailyDeleteLimit = useSubscriptionStore((s) => s.dailyDeleteLimit);
+  const incrementDeleteCount = useSubscriptionStore.getState().incrementDeleteCount;
+  const upgradeToPro = useSubscriptionStore.getState().upgradeToPro;
 
   // Get functions from store - these are stable references
   const setPhotos = usePhotoStore.getState().setPhotos;
@@ -76,6 +86,16 @@ export function SwipeScreenNew(props: any) {
   const handleSwipeLeft = async () => {
     const photo = getCurrentPhoto();
     if (photo) {
+      // Check freemium limit
+      const { canDelete, remaining } = incrementDeleteCount();
+
+      if (!canDelete) {
+        // Show paywall
+        setShowPaywall(true);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+        return;
+      }
+
       // Show mini confetti burst!
       setShowMiniConfetti(true);
 
@@ -267,6 +287,23 @@ export function SwipeScreenNew(props: any) {
               )}
 
               <View style={styles.headerRight}>
+                {/* Pro Badge */}
+                {isPro && (
+                  <View style={styles.proBadge}>
+                    <Ionicons name="star" size={14} color="#FFD700" />
+                    <Text style={styles.proText}>PRO</Text>
+                  </View>
+                )}
+
+                {/* Freemium Counter */}
+                {!isPro && (
+                  <View style={styles.freemiumCounter}>
+                    <Text style={styles.freemiumText}>
+                      {dailyDeleteLimit - dailyDeleteCount} igjen
+                    </Text>
+                  </View>
+                )}
+
                 {currentStreak > 0 && (
                   <View style={styles.streakBadge}>
                     <Ionicons name="flame" size={16} color="#FF6B35" />
@@ -414,6 +451,19 @@ export function SwipeScreenNew(props: any) {
         goalNumber={dailyGoal}
         todayTotal={todaysPhotosDeleted}
         spaceSaved={getTodaySpaceSavedFormatted()}
+      />
+
+      {/* Paywall Modal */}
+      <PaywallModal
+        visible={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        onUpgrade={() => {
+          upgradeToPro();
+          setShowPaywall(false);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }}
+        deletedToday={dailyDeleteCount}
+        limit={dailyDeleteLimit}
       />
     </View>
   );
@@ -751,6 +801,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+  },
+  proBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1F2937",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 100,
+    gap: 4,
+    marginRight: 8,
+  },
+  proText: {
+    color: "#FFD700",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 0.5,
+  },
+  freemiumCounter: {
+    backgroundColor: "rgba(59, 130, 246, 0.1)",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 100,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: "#3B82F6",
+  },
+  freemiumText: {
+    color: "#1E40AF",
+    fontSize: 12,
+    fontWeight: "700",
   },
   hintText: {
     textAlign: "center",
