@@ -8,9 +8,9 @@ export function TestScreen(props: any) {
       <Text style={styles.subtitle}>If you see this, navigation works!</Text>
       <Pressable
         style={styles.button}
-        onPress={() => props.navigation.navigate("Swipe")}
+        onPress={() => props.navigation.navigate("Welcome")}
       >
-        <Text style={styles.buttonText}>Go to Swipe Screen</Text>
+        <Text style={styles.buttonText}>Go to Welcome Screen</Text>
       </Pressable>
     </View>
   );
