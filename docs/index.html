@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fjærn - Rydd bildene dine</title>
+    <meta name="description" content="Fjærn hjelper deg med å rydde opp i fotobiblioteket ditt. Finn og slett duplikater, skjermbilder og bildeserier med AI.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1F2937;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .logo {
+            font-size: 120px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 4em;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tagline {
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #EF4444;
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            color: #EF4444;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .feature p {
+            color: #6B7280;
+            line-height: 1.8;
+        }
+
+        .pricing {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+            padding: 80px 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .pricing h2 {
+            font-size: 3em;
+            margin-bottom: 50px;
+        }
+
+        .pricing-cards {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .pricing-card {
+            background: white;
+            color: #1F2937;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #3B82F6;
+        }
+
+        .price {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #EF4444;
+            margin-bottom: 20px;
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin: 30px 0;
+        }
+
+        .pricing-features li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .pricing-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10B981;
+            font-weight: bold;
+        }
+
+        footer {
+            background: #1F2937;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer a {
+            color: #EF4444;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .logo {
+                font-size: 80px;
+            }
+
+            .tagline {
+                font-size: 1.2em;
+            }
+
+            .pricing h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo">🧹</div>
+            <h1>Fjærn</h1>
+            <p class="tagline">Rydd bildene dine. Frigjør lagringsplass. På sekunder.</p>
+            <a href="#" class="cta-button">Last ned på App Store</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <div class="feature-icon">🤖</div>
+            <h3>AI-drevet smart opprydding</h3>
+            <p>Finn automatisk duplikater, skjermbilder og bildeserier. Vår AI analyserer tusenvis av bilder på sekunder.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🔒</div>
+            <h3>100% personvern</h3>
+            <p>Alle bilder behandles lokalt på din enhet. Ingenting sendes til internett. Ingen datainnsamling.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">⚡</div>
+            <h3>Lynrask og enkel</h3>
+            <p>Swipe gjennom bilder som Tinder. Elegant norsk design. Morsom og motiverende opplevelse.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">📱</div>
+            <h3>Frigjør lagringsplass</h3>
+            <p>Se nøyaktig hvor mye plass du sparer. Få tilbake gigabytes med lagring på minutter.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🎯</div>
+            <h3>Smart kategorisering</h3>
+            <p>Duplikater, skjermbilder, bildeserier - alt organisert og klart for rydding.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🇳🇴</div>
+            <h3>Laget i Norge</h3>
+            <p>Norsk app, norsk design, norsk språk. Laget for nordmenn av nordmenn.</p>
+        </div>
+    </section>
+
+    <section class="pricing">
+        <h2>Enkel prising</h2>
+        <div class="pricing-cards">
+            <div class="pricing-card">
+                <h3>Gratis</h3>
+                <div class="price">0 kr</div>
+                <ul class="pricing-features">
+                    <li>30 bildeSlettinger per dag</li>
+                    <li>Smart AI-kategorier</li>
+                    <li>Duplikatdeteksjon</li>
+                    <li>100% lokalt & privat</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Pro Månedlig</h3>
+                <div class="price">49 kr<span style="font-size: 0.4em; color: #6B7280;">/mnd</span></div>
+                <ul class="pricing-features">
+                    <li>Ubegrenset bildesletting</li>
+                    <li>Alle Pro-funksjoner</li>
+                    <li>Prioritert support</li>
+                    <li>Fremtidige oppdateringer</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Pro Årlig</h3>
+                <div class="price">399 kr<span style="font-size: 0.4em; color: #6B7280;">/år</span></div>
+                <ul class="pricing-features">
+                    <li>Ubegrenset bildesletting</li>
+                    <li>Alle Pro-funksjoner</li>
+                    <li>Spar 189 kr (32%)</li>
+                    <li>Fremtidige oppdateringer</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 Fjærn. Alle rettigheter reservert.</p>
+        <p style="margin-top: 20px;">
+            <a href="privacy.html">Personvernerklæring</a>
+            <a href="terms.html">Vilkår for bruk</a>
+            <a href="mailto:[DIN_EPOST@example.com]">Kontakt</a>
+        </p>
+    </footer>
+</body>
+</html>
