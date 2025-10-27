@@ -14,7 +14,7 @@ export function WelcomeScreenNew(props: any) {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={["#FFFFFF", "#EF4444", "#1E40AF"]}
+        colors={["#FFFFFF", "#FECACA", "#EF4444"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
