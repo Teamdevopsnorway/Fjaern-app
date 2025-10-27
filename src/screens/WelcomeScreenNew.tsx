@@ -1,32 +1,20 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet, SafeAreaView, Modal } from "react-native";
+import React from "react";
+import { View, Text, Pressable, StyleSheet, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { TrollAvatar } from "../components/TrollAvatar";
-import { DailyGoalSelector } from "../components/DailyGoalSelector";
 
 export function WelcomeScreenNew(props: any) {
-  const [showGoalSelector, setShowGoalSelector] = useState(false);
-
   const handleGetStarted = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    props.navigation.replace("Swipe");
-  };
-
-  const handleOpenGoalSelector = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setShowGoalSelector(true);
-  };
-
-  const handleCloseGoalSelector = () => {
-    setShowGoalSelector(false);
+    props.navigation.navigate("GoalChoice");
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={["#E8F4F8", "#B8D4E0", "#8FB5C7"]}
+        colors={["#FFFFFF", "#EF4444", "#1E40AF"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -78,19 +66,6 @@ export function WelcomeScreenNew(props: any) {
                 </Text>
               </View>
             </View>
-
-            <Pressable onPress={handleOpenGoalSelector} style={styles.featureCard}>
-              <View style={styles.featureIconContainer}>
-                <Ionicons name="flag" size={24} color="#FFA000" />
-              </View>
-              <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Sett Dagsmål</Text>
-                <Text style={styles.featureDescription}>
-                  Velg et daglig mål og få masse confetti! 🎉
-                </Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color="#5A8FA8" />
-            </Pressable>
           </View>
 
           {/* CTA Button */}
@@ -106,20 +81,6 @@ export function WelcomeScreenNew(props: any) {
           </Text>
         </View>
       </LinearGradient>
-
-      {/* Daily Goal Selector Modal */}
-      <Modal
-        visible={showGoalSelector}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={handleCloseGoalSelector}
-      >
-        <Pressable style={styles.modalOverlay} onPress={handleCloseGoalSelector}>
-          <Pressable onPress={(e) => e.stopPropagation()}>
-            <DailyGoalSelector onClose={handleCloseGoalSelector} />
-          </Pressable>
-        </Pressable>
-      </Modal>
     </SafeAreaView>
   );
 }
@@ -127,7 +88,7 @@ export function WelcomeScreenNew(props: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8F4F8",
+    backgroundColor: "#FFFFFF",
   },
   gradient: {
     flex: 1,
@@ -230,11 +191,5 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     textAlign: "center",
     marginTop: 12,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });

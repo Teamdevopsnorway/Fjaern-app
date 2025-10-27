@@ -1,11 +1,13 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { WelcomeScreenNew } from "../screens/WelcomeScreenNew";
+import { GoalChoiceScreen } from "../screens/GoalChoiceScreen";
 import { SwipeScreenNew } from "../screens/SwipeScreenNew";
 import { ReviewScreenNew } from "../screens/ReviewScreenNew";
 
 export type RootStackParamList = {
   Welcome: undefined;
+  GoalChoice: undefined;
   Swipe: undefined;
   Review: undefined;
 };
@@ -26,6 +28,13 @@ export const AppNavigator = () => {
         component={WelcomeScreenNew}
         options={{
           animation: "fade",
+        }}
+      />
+      <Stack.Screen
+        name="GoalChoice"
+        component={GoalChoiceScreen}
+        options={{
+          animation: "slide_from_right",
         }}
       />
       <Stack.Screen name="Swipe" component={SwipeScreenNew} />

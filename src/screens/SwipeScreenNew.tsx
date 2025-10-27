@@ -240,7 +240,7 @@ export function SwipeScreenNew(props: any) {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#E8F4F8", "#B8D4E0"]}
+        colors={["#FFFFFF", "#FEE2E2", "#DBEAFE"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -425,7 +425,7 @@ export function SwipeScreenNew(props: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8F4F8",
+    backgroundColor: "#FFFFFF",
   },
   gradient: {
     flex: 1,
@@ -572,7 +572,7 @@ const styles = StyleSheet.create({
   statText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#2C5F7C",
+    color: "#1E40AF",
   },
   proUpgradeBadge: {
     flexDirection: "row",
@@ -609,11 +609,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#2C5F7C",
+    color: "#DC2626",
   },
   headerSubtitle: {
     fontSize: 14,
-    color: "#5A8BA3",
+    color: "#1E40AF",
     marginTop: 4,
   },
   deleteCounter: {
