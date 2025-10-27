@@ -170,7 +170,7 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({
             >
               <View style={styles.overlayContent}>
                 <Ionicons name="trash" size={60} color="white" />
-                <Text style={styles.overlayText}>Slett</Text>
+                <Text style={styles.overlayText}>Fjærn</Text>
               </View>
             </LinearGradient>
           </Animated.View>
