@@ -156,7 +156,9 @@ Using Zustand with AsyncStorage persistence for:
 - Caused by ALL Zustand stores using destructured selectors incorrectly
 - This created new object references on every render → infinite re-render loops → 100% CPU usage
 
-**Root Cause:**
+**Root Causes:**
+
+1. **Destructured store objects:**
 ```typescript
 // WRONG - Creates new object every render → infinite loop 🔥
 const { isPro, deletedCount } = useSubscriptionStore();
@@ -164,7 +166,16 @@ const { allPhotos, currentIndex } = usePhotoStore();
 const { dailyGoal, currentStreak } = useGamificationStore();
 ```
 
+2. **Function selectors:**
+```typescript
+// WRONG - Returns new function reference every render → infinite loop 🔥
+const hasReachedLimit = useSubscriptionStore((s) => s.hasReachedLimit);
+hasReachedLimit(); // Function changes on every render
+```
+
 **Solution:**
+
+1. **Use individual value selectors:**
 ```typescript
 // CORRECT - Only re-renders when specific values change ✅
 const isPro = useSubscriptionStore((s) => s.isPro);
@@ -173,8 +184,20 @@ const allPhotos = usePhotoStore((s) => s.allPhotos);
 const currentIndex = usePhotoStore((s) => s.currentIndex);
 ```
 
+2. **Calculate derived values locally:**
+```typescript
+// CORRECT - Calculate locally instead of calling store functions ✅
+const deletedCount = useSubscriptionStore((s) => s.deletedCount);
+const freeDeleteLimit = useSubscriptionStore((s) => s.freeDeleteLimit);
+const isPro = useSubscriptionStore((s) => s.isPro);
+
+// Derived values
+const hasReachedLimit = !isPro && deletedCount >= freeDeleteLimit;
+const remainingDeletes = isPro ? -1 : Math.max(0, freeDeleteLimit - deletedCount);
+```
+
 **Files Fixed:**
-- ✅ `src/screens/SwipeScreenNew.tsx` - All photoStore, gamificationStore, subscriptionStore selectors
+- ✅ `src/screens/SwipeScreenNew.tsx` - All stores + derived values calculated locally
 - ✅ `src/screens/SwipeScreen.tsx` - All photoStore selectors
 - ✅ `src/screens/ReviewScreenNew.tsx` - All photoStore selectors
 - ✅ `src/screens/ReviewScreen.tsx` - All photoStore selectors
@@ -187,12 +210,17 @@ const currentIndex = usePhotoStore((s) => s.currentIndex);
 - ✅ No more infinite loops or CPU spikes
 - ✅ Proper Zustand selector pattern implemented across entire codebase
 - ✅ Vibecode app stays responsive
+- ✅ Derived values calculated locally for better performance
 
 **Technical Explanation:**
 
-Zustand's `useStore()` without a selector returns the entire store object. Each time the component renders, this creates a NEW object reference, even if the values inside are identical. React sees this as a change and triggers a re-render, which creates another new object, triggering another re-render → infinite loop.
+Zustand's `useStore()` without a selector returns the entire store object. Each time the component renders, this creates a NEW object reference, even if the values inside are identical. React sees this as a change and triggers a re-render → infinite loop.
 
-By using individual selectors like `useStore((s) => s.value)`, Zustand can compare the ACTUAL value and only trigger re-renders when that specific value changes.
+Additionally, when selecting FUNCTIONS from the store (like `hasReachedLimit`), Zustand returns a new function reference on every render, causing the same infinite loop problem.
+
+The solution:
+1. Use individual selectors for VALUES: `useStore((s) => s.value)`
+2. Select only primitive values and calculate derived values locally in the component
 
 ---
 

@@ -50,9 +50,13 @@ export function SwipeScreenNew(props: any) {
 
   // Use individual selectors to avoid infinite loops
   const incrementDeleteCount = useSubscriptionStore((s) => s.incrementDeleteCount);
-  const hasReachedLimit = useSubscriptionStore((s) => s.hasReachedLimit);
-  const getRemainingDeletes = useSubscriptionStore((s) => s.getRemainingDeletes);
   const isPro = useSubscriptionStore((s) => s.isPro);
+  const deletedCount = useSubscriptionStore((s) => s.deletedCount);
+  const freeDeleteLimit = useSubscriptionStore((s) => s.freeDeleteLimit);
+
+  // Calculate values locally instead of using functions from store
+  const hasReachedLimit = !isPro && deletedCount >= freeDeleteLimit;
+  const remainingDeletes = isPro ? -1 : Math.max(0, freeDeleteLimit - deletedCount);
 
   useEffect(() => {
     initializePhotos();
@@ -76,7 +80,7 @@ export function SwipeScreenNew(props: any) {
     const photo = getCurrentPhoto();
     if (photo) {
       // Check subscription limit BEFORE incrementing
-      if (hasReachedLimit()) {
+      if (hasReachedLimit) {
         setShowPaywall(true);
         return;
       }
@@ -116,7 +120,7 @@ export function SwipeScreenNew(props: any) {
 
   const handleButtonPress = (action: "delete" | "keep") => {
     // Check limit before allowing delete action
-    if (action === "delete" && hasReachedLimit()) {
+    if (action === "delete" && hasReachedLimit) {
       setShowPaywall(true);
       return;
     }
@@ -306,7 +310,7 @@ export function SwipeScreenNew(props: any) {
                   <Pressable onPress={() => setShowPaywall(true)} style={styles.proUpgradeBadge}>
                     <Ionicons name="star" size={14} color="#FFD700" />
                     <Text style={styles.proUpgradeText}>
-                      {getRemainingDeletes()} gratis igjen
+                      {remainingDeletes} gratis igjen
                     </Text>
                   </Pressable>
                 )}
