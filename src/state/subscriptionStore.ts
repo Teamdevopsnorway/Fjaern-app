@@ -52,14 +52,25 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         // Check if new day and reset if needed
         get().resetDailyCount();
 
+        // Get fresh count after potential reset
+        const currentCount = get().dailyDeleteCount;
+
         // Pro users have unlimited
         if (isPro) {
           set({ totalDeleted: totalDeleted + 1 });
           return { canDelete: true, remaining: -1 };
         }
 
-        // Free users check limit
-        const newCount = dailyDeleteCount + 1;
+        // Check if already at limit BEFORE incrementing
+        if (currentCount >= dailyDeleteLimit) {
+          return {
+            canDelete: false,
+            remaining: 0,
+          };
+        }
+
+        // Free users can delete - increment count
+        const newCount = currentCount + 1;
         const remaining = dailyDeleteLimit - newCount;
 
         set({
@@ -68,7 +79,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         });
 
         return {
-          canDelete: newCount <= dailyDeleteLimit,
+          canDelete: true,
           remaining: Math.max(0, remaining),
         };
       },
