@@ -3,6 +3,10 @@
  *
  * This file handles App Store purchases for the Pro subscription.
  *
+ * IMPORTANT: react-native-iap requires native iOS modules that must be built on macOS.
+ * In the Vibecode preview environment (Linux), we use mock implementations for testing.
+ * The real IAP functions will work when you build the app with EAS or on a Mac.
+ *
  * SETUP REQUIRED IN APP STORE CONNECT:
  * 1. Create a subscription product with ID: "fjaern_pro_monthly"
  * 2. Enable In-App Purchase capability in your App ID
@@ -18,24 +22,52 @@
 
 import { Alert, Platform } from "react-native";
 import { useSubscriptionStore } from "../state/subscriptionStore";
-import {
-  initConnection,
-  endConnection,
-  fetchProducts,
-  requestPurchase,
-  finishTransaction,
-  purchaseUpdatedListener,
-  purchaseErrorListener,
-  getAvailablePurchases,
-  getActiveSubscriptions,
-  PurchaseError,
-  Product,
-  Purchase,
-  ErrorCode
-} from "react-native-iap";
 
 // Product ID for App Store (configure in App Store Connect)
 export const PRODUCT_ID = "fjaern_pro_monthly";
+
+// Check if we're in a build environment with native modules
+const HAS_NATIVE_MODULES = (() => {
+  try {
+    // Try to require react-native-iap to see if native modules are available
+    require("react-native-iap");
+    return true;
+  } catch (error) {
+    console.log("react-native-iap native modules not available, using mock implementation");
+    return false;
+  }
+})();
+
+// Type definitions for IAP
+type Purchase = any;
+type PurchaseError = any;
+type Product = any;
+
+// Import real IAP functions only if native modules are available
+let initConnection: any;
+let endConnection: any;
+let fetchProducts: any;
+let requestPurchase: any;
+let finishTransaction: any;
+let purchaseUpdatedListener: any;
+let purchaseErrorListener: any;
+let getAvailablePurchases: any;
+let getActiveSubscriptions: any;
+let ErrorCode: any = { UserCancelled: "user-cancelled" };
+
+if (HAS_NATIVE_MODULES) {
+  const IAP = require("react-native-iap");
+  initConnection = IAP.initConnection;
+  endConnection = IAP.endConnection;
+  fetchProducts = IAP.fetchProducts;
+  requestPurchase = IAP.requestPurchase;
+  finishTransaction = IAP.finishTransaction;
+  purchaseUpdatedListener = IAP.purchaseUpdatedListener;
+  purchaseErrorListener = IAP.purchaseErrorListener;
+  getAvailablePurchases = IAP.getAvailablePurchases;
+  getActiveSubscriptions = IAP.getActiveSubscriptions;
+  ErrorCode = IAP.ErrorCode;
+}
 
 // Purchase listener references for cleanup
 let purchaseUpdateSubscription: any = null;
@@ -47,6 +79,11 @@ let purchaseErrorSubscription: any = null;
  */
 export const initializeIAP = async (): Promise<void> => {
   try {
+    if (!HAS_NATIVE_MODULES) {
+      console.log("IAP initialized (mock mode for Vibecode preview)");
+      return;
+    }
+
     await initConnection();
     console.log("IAP connection initialized successfully");
 
@@ -107,6 +144,8 @@ export const initializeIAP = async (): Promise<void> => {
  */
 const checkExistingPurchases = async (): Promise<void> => {
   try {
+    if (!HAS_NATIVE_MODULES) return;
+
     // Check if user has active subscriptions
     const hasActive = await getActiveSubscriptions();
 
@@ -128,6 +167,19 @@ const checkExistingPurchases = async (): Promise<void> => {
  */
 export const getProducts = async (): Promise<Product[]> => {
   try {
+    if (!HAS_NATIVE_MODULES) {
+      // Mock product for preview
+      return [
+        {
+          productId: PRODUCT_ID,
+          title: "Fjærn Pro",
+          description: "Ubegrenset bilderydding",
+          price: "99 kr",
+          localizedPrice: "99 kr",
+        },
+      ] as any;
+    }
+
     const products = await fetchProducts({ skus: [PRODUCT_ID] });
     console.log("Fetched products:", products);
     return products || [];
@@ -142,6 +194,28 @@ export const getProducts = async (): Promise<Product[]> => {
  */
 export const purchaseProSubscription = async (): Promise<boolean> => {
   try {
+    if (!HAS_NATIVE_MODULES) {
+      // Mock purchase for preview
+      Alert.alert(
+        "Demo Mode",
+        "Dette er en demo i Vibecode preview. I produksjon vil dette åpne App Store betalingsdialog.\n\nTrykk OK for å simulere vellykket kjøp.",
+        [
+          {
+            text: "Avbryt",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              useSubscriptionStore.getState().upgradeToPro();
+              Alert.alert("Suksess!", "Du er nå Fjærn Pro! 🎉");
+            },
+          },
+        ]
+      );
+      return true;
+    }
+
     // Request the purchase (this triggers the purchase listeners)
     await requestPurchase({
       request: {
@@ -177,6 +251,28 @@ export const purchaseProSubscription = async (): Promise<boolean> => {
  */
 export const restorePurchases = async (): Promise<boolean> => {
   try {
+    if (!HAS_NATIVE_MODULES) {
+      // Mock restore for preview
+      Alert.alert(
+        "Demo Mode",
+        "I produksjon vil dette sjekke App Store for tidligere kjøp.\n\nVil du simulere gjenoppretting?",
+        [
+          {
+            text: "Nei",
+            style: "cancel",
+          },
+          {
+            text: "Ja",
+            onPress: () => {
+              useSubscriptionStore.getState().upgradeToPro();
+              Alert.alert("Kjøp gjenopprettet!", "Fjærn Pro er aktivert. 🎉");
+            },
+          },
+        ]
+      );
+      return true;
+    }
+
     // Get all available purchases (not yet consumed/finished)
     const purchases = await getAvailablePurchases();
     console.log("Available purchases:", purchases);
@@ -220,6 +316,11 @@ export const restorePurchases = async (): Promise<boolean> => {
  */
 export const endIAP = async (): Promise<void> => {
   try {
+    if (!HAS_NATIVE_MODULES) {
+      console.log("IAP connection ended (mock mode)");
+      return;
+    }
+
     // Remove listeners
     if (purchaseUpdateSubscription) {
       purchaseUpdateSubscription.remove();
