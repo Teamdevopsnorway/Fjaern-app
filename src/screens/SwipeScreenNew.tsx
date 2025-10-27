@@ -245,6 +245,12 @@ export function SwipeScreenNew(props: any) {
                 </Pressable>
               ) : (
                 <View style={styles.headerLeft}>
+                  <Pressable
+                    onPress={() => navigation.navigate("GoalChoice")}
+                    style={styles.backIconButton}
+                  >
+                    <Ionicons name="arrow-back" size={24} color="#1E40AF" />
+                  </Pressable>
                   <TrollAvatar size={50} animate={todaysPhotosDeleted > 0} />
                   <View style={styles.headerTextContainer}>
                     <Text style={styles.headerTitle}>Rydd Opp</Text>
@@ -710,6 +716,20 @@ const styles = StyleSheet.create({
   },
   infoButton: {
     // Specific styles for info
+  },
+  backIconButton: {
+    width: 40,
+    height: 40,
+    backgroundColor: "white",
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   hintText: {
     textAlign: "center",

@@ -209,11 +209,17 @@ Using Zustand with AsyncStorage persistence for:
    - Back button for å gå tilbake til kategorier
    - Sømløs navigasjon mellom skjermer
 
+4. ✅ **Tilbake-knapper overalt**
+   - Manuell swipe har tilbake-knapp til GoalChoice
+   - Kategori swipe har tilbake-knapp til Categories
+   - Categories har tilbake-knapp til GoalChoice
+   - Fullstendig navigasjonsflyt
+
 **Tekniske forbedringer:**
 - `src/utils/photoAnalysis.ts` - Forbedret `findDuplicates()` algoritme
 - `src/screens/WelcomeScreenNew.tsx` - Smart forslag banner med blå gradient
-- `src/screens/CategoriesScreen.tsx` - Navigerer direkte til SwipeScreenNew
-- `src/screens/SwipeScreenNew.tsx` - Conditional header med back button
+- `src/screens/CategoriesScreen.tsx` - Navigerer direkte til SwipeScreenNew med back button
+- `src/screens/SwipeScreenNew.tsx` - Conditional header med back button for både manuell og kategori-modus
 - `src/screens/ReviewScreenNew.tsx` - Smart navigasjon tilbake til kategorier
 
 **Hvorfor dette gjør Fjærn MVP-ready:**
@@ -223,6 +229,7 @@ Using Zustand with AsyncStorage persistence for:
 - ✅ Performance-optimalisert for store biblioteker
 - ✅ Norsk språk og søt troll-maskot for unik identitet
 - ✅ Gamification (streaks, milestones) for retensjon
+- ✅ Intuitiv navigasjon med tilbake-knapper overalt
 
 ---
 
