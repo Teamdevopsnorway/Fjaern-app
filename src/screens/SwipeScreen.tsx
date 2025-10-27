@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, ActivityIndicator, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
@@ -9,7 +9,7 @@ import { usePhotoStore } from "../state/photoStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
 
-export const SwipeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+const SwipeScreenComponent: React.FC<{ navigation: any }> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
@@ -351,3 +351,6 @@ export const SwipeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     </View>
   );
 };
+
+// Export with a simple wrapper to avoid NativeWind interop issues
+export const SwipeScreen = (props: any) => <SwipeScreenComponent {...props} />;

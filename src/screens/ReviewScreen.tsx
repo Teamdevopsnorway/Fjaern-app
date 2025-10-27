@@ -20,7 +20,7 @@ import { deletePhotos, formatBytes } from "../utils/photoUtils";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const IMAGE_SIZE = (SCREEN_WIDTH - 48) / 3;
 
-export const ReviewScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+const ReviewScreenComponent: React.FC<{ navigation: any }> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -298,3 +298,6 @@ export const ReviewScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     </View>
   );
 };
+
+// Export with a simple wrapper to avoid NativeWind interop issues
+export const ReviewScreen = (props: any) => <ReviewScreenComponent {...props} />;

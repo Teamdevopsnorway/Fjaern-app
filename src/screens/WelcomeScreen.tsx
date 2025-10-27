@@ -29,7 +29,7 @@ const features = [
   },
 ];
 
-export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+const WelcomeScreenComponent: React.FC<{ navigation: any }> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
 
   const handleGetStarted = () => {
@@ -141,3 +141,6 @@ export const WelcomeScreen: React.FC<{ navigation: any }> = ({ navigation }) => 
     </View>
   );
 };
+
+// Export with a simple wrapper to avoid NativeWind interop issues
+export const WelcomeScreen = (props: any) => <WelcomeScreenComponent {...props} />;

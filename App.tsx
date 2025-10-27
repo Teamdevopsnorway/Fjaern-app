@@ -1,4 +1,5 @@
 import React from "react";
+import { View, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
@@ -30,10 +31,19 @@ const openai_api_key = Constants.expoConfig.extra.apikey;
 */
 
 export default function App() {
+  const [isNavigationReady, setIsNavigationReady] = React.useState(false);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <NavigationContainer>
+        <NavigationContainer
+          onReady={() => setIsNavigationReady(true)}
+          fallback={
+            <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "white" }}>
+              <ActivityIndicator size="large" color="#8B5CF6" />
+            </View>
+          }
+        >
           <AppNavigator />
           <StatusBar style="dark" />
         </NavigationContainer>
