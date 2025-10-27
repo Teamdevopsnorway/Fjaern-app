@@ -174,9 +174,10 @@ export const usePhotoStore = create<PhotoState>()(
     {
       name: "photo-storage",
       storage: createJSONStorage(() => AsyncStorage),
-      // Only persist essential data, not the photos themselves
+      // Don't persist photos or currentIndex - only stats
       partialize: (state) => ({
-        stats: state.stats,
+        photosToDelete: state.photosToDelete,
+        photosToKeep: state.photosToKeep,
       }),
     }
   )
