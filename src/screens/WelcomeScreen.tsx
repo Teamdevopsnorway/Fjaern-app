@@ -29,7 +29,8 @@ const features = [
   },
 ];
 
-function WelcomeScreenComponent({ navigation }: { navigation: any }) {
+function WelcomeScreenComponent(props: any) {
+  const navigation = props.navigation;
   const insets = useSafeAreaInsets();
 
   const handleGetStarted = () => {

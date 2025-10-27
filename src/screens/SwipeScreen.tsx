@@ -9,7 +9,8 @@ import { usePhotoStore } from "../state/photoStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
 
-function SwipeScreenComponent({ navigation }: { navigation: any }) {
+function SwipeScreenComponent(props: any) {
+  const navigation = props.navigation;
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);

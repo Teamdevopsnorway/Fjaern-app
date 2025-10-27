@@ -20,7 +20,8 @@ import { deletePhotos, formatBytes } from "../utils/photoUtils";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const IMAGE_SIZE = (SCREEN_WIDTH - 48) / 3;
 
-function ReviewScreenComponent({ navigation }: { navigation: any }) {
+function ReviewScreenComponent(props: any) {
+  const navigation = props.navigation;
   const insets = useSafeAreaInsets();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
