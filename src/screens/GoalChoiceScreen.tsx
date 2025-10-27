@@ -27,14 +27,15 @@ export function GoalChoiceScreen(props: any) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <LinearGradient
         colors={["#FFFFFF", "#EF4444", "#1E40AF"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
       >
-        <View style={styles.content}>
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.content}>
           {/* Hero Section */}
           <View style={styles.hero}>
             <View style={styles.trollAvatarContainer}>
@@ -95,6 +96,7 @@ export function GoalChoiceScreen(props: any) {
             💡 Tips: Et dagsmål hjelper deg holde motivasjonen!
           </Text>
         </View>
+        </SafeAreaView>
       </LinearGradient>
 
       {/* Daily Goal Selector Modal */}
@@ -110,7 +112,7 @@ export function GoalChoiceScreen(props: any) {
           </Pressable>
         </Pressable>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -120,6 +122,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   gradient: {
+    flex: 1,
+  },
+  safeArea: {
     flex: 1,
   },
   content: {
