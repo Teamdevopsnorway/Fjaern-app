@@ -50,12 +50,11 @@ export function SwipeScreenNew(props: any) {
     getDailyProgress,
   } = useGamificationStore();
 
-  const {
-    incrementDeleteCount,
-    hasReachedLimit,
-    getRemainingDeletes,
-    isPro,
-  } = useSubscriptionStore();
+  // Use individual selectors to avoid infinite loops
+  const incrementDeleteCount = useSubscriptionStore((s) => s.incrementDeleteCount);
+  const hasReachedLimit = useSubscriptionStore((s) => s.hasReachedLimit);
+  const getRemainingDeletes = useSubscriptionStore((s) => s.getRemainingDeletes);
+  const isPro = useSubscriptionStore((s) => s.isPro);
 
   useEffect(() => {
     initializePhotos();

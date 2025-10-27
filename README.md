@@ -147,6 +147,31 @@ Using Zustand with AsyncStorage persistence for:
 
 ## Recent Updates
 
+### 🐛 Critical Bug Fix - App Freeze After First Photo Deletion
+
+**Fixed infinite loop causing app to hang after first deletion!**
+
+**Problem:**
+- App would freeze after deleting the first photo
+- Caused by Zustand selector creating new object references on every render
+- This triggered infinite re-render loops
+
+**Solution:**
+- Changed from destructured selectors: `const { isPro } = useSubscriptionStore()`
+- To individual selectors: `const isPro = useSubscriptionStore((s) => s.isPro)`
+- This prevents new object creation and stops infinite loops
+
+**Files Fixed:**
+- ✅ `src/screens/SwipeScreenNew.tsx` - Fixed subscription store selectors
+- ✅ `src/components/PaywallModal.tsx` - Fixed subscription store selectors
+
+**Result:**
+- ✅ App now works smoothly with unlimited photo deletions
+- ✅ No more freezing or hanging
+- ✅ Proper Zustand selector pattern implemented
+
+---
+
 ### 🚀 Production-Ready In-App Purchases - COMPLETE!
 
 **Fjærn now has fully functional App Store in-app purchases with react-native-iap 14.x!**

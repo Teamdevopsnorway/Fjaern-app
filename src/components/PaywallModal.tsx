@@ -26,7 +26,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   onUpgrade,
 }) => {
   const scale = useSharedValue(0);
-  const { deletedCount, freeDeleteLimit } = useSubscriptionStore();
+
+  // Use individual selectors to avoid infinite loops
+  const deletedCount = useSubscriptionStore((s) => s.deletedCount);
+  const freeDeleteLimit = useSubscriptionStore((s) => s.freeDeleteLimit);
 
   useEffect(() => {
     if (visible) {
