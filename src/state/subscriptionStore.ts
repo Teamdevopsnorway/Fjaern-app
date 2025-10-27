@@ -13,7 +13,7 @@ interface SubscriptionState {
   subscriptionType: "free" | "pro" | null;
 
   // Actions
-  incrementDeleteCount: () => boolean; // Returns true if limit reached
+  incrementDeleteCount: () => void; // Just increments, doesn't return anything
   hasReachedLimit: () => boolean;
   getRemainingDeletes: () => number;
   upgradeToPro: () => void;
@@ -37,15 +37,12 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       incrementDeleteCount: () => {
         const state = get();
         if (state.isPro) {
-          // Pro users have unlimited deletes
-          return false;
+          // Pro users have unlimited deletes, don't increment
+          return;
         }
 
         const newCount = state.deletedCount + 1;
         set({ deletedCount: newCount });
-
-        // Check if limit reached
-        return newCount >= state.freeDeleteLimit;
       },
 
       hasReachedLimit: () => {

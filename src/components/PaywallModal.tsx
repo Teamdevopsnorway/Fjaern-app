@@ -164,6 +164,11 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                 <Text style={styles.restoreText}>Gjenopprett Kjøp</Text>
               </Pressable>
 
+              {/* Continue browsing button */}
+              <Pressable onPress={handleClose} style={styles.continueButton}>
+                <Text style={styles.continueText}>Fortsett å Bla (Kun Behold)</Text>
+              </Pressable>
+
               {/* Terms */}
               <Text style={styles.terms}>
                 Betalingen belastes din App Store-konto. Abonnementet fornyes automatisk med mindre det kanselleres minst 24 timer før periodens slutt.
@@ -315,12 +320,22 @@ const styles = StyleSheet.create({
   restoreButton: {
     paddingVertical: 12,
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   restoreText: {
     color: "#2C5F7C",
     fontSize: 14,
     fontWeight: "600",
+  },
+  continueButton: {
+    paddingVertical: 12,
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  continueText: {
+    color: "#6B7280",
+    fontSize: 13,
+    fontWeight: "500",
   },
   terms: {
     fontSize: 11,

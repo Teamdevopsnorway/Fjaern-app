@@ -78,15 +78,17 @@ export function SwipeScreenNew(props: any) {
   const handleSwipeLeft = () => {
     const photo = getCurrentPhoto();
     if (photo) {
-      // Check subscription limit
-      const limitReached = incrementDeleteCount();
-      if (limitReached) {
-        // Show paywall
+      // Check subscription limit BEFORE incrementing
+      if (hasReachedLimit()) {
         setShowPaywall(true);
         return;
       }
 
+      // Now we can safely delete
       markToDelete(photo);
+
+      // Increment count AFTER successful delete
+      incrementDeleteCount();
 
       // Gamification: increment and check for milestone and daily goal
       const result = incrementPhotosCleaned(2 * 1024 * 1024); // 2MB estimate
