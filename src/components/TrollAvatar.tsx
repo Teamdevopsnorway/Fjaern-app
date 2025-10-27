@@ -47,131 +47,163 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
         {/* Body - cute round shape */}
         <Ellipse
           cx="50"
-          cy="60"
-          rx="32"
-          ry="35"
-          fill="#8B9DC3"
+          cy="62"
+          rx="34"
+          ry="36"
+          fill="#7B9DC8"
         />
 
-        {/* Belly patch - lighter color */}
+        {/* Belly patch - lighter color with Norwegian touch */}
         <Ellipse
           cx="50"
-          cy="68"
-          rx="20"
+          cy="70"
+          rx="22"
+          ry="24"
+          fill="#B0C4DE"
+        />
+
+        {/* Head - rounder and cuter */}
+        <Circle
+          cx="50"
+          cy="34"
+          r="30"
+          fill="#7B9DC8"
+        />
+
+        {/* Fluffy ears - more prominent */}
+        <Circle
+          cx="26"
+          cy="30"
+          r="12"
+          fill="#6A8BB5"
+        />
+        <Circle
+          cx="74"
+          cy="30"
+          r="12"
+          fill="#6A8BB5"
+        />
+
+        {/* Wild Nordic troll hair - more chaotic and fun */}
+        <Path
+          d="M 38 10 Q 35 2, 33 6 Q 31 1, 29 7 Q 27 0, 25 8"
+          stroke="#4A6B8A"
+          strokeWidth="3.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 45 8 Q 43 0, 41 5 Q 39 -2, 37 6"
+          stroke="#4A6B8A"
+          strokeWidth="3.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 50 6 Q 48 -1, 46 4 Q 44 -3, 42 5"
+          stroke="#4A6B8A"
+          strokeWidth="4"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 55 8 Q 57 0, 59 5 Q 61 -2, 63 6"
+          stroke="#4A6B8A"
+          strokeWidth="3.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 62 10 Q 65 2, 67 6 Q 69 1, 71 7 Q 73 0, 75 8"
+          stroke="#4A6B8A"
+          strokeWidth="3.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+
+        {/* Eyes - MUCH bigger and cuter! */}
+        <Circle cx="38" cy="32" r="8" fill="white" />
+        <Circle cx="62" cy="32" r="8" fill="white" />
+
+        {/* Pupils - bigger and more expressive */}
+        <Circle cx="39" cy="33" r="5" fill="#2D3748" />
+        <Circle cx="63" cy="33" r="5" fill="#2D3748" />
+
+        {/* Sparkles in eyes */}
+        <Circle cx="41" cy="30" r="2.5" fill="white" />
+        <Circle cx="65" cy="30" r="2.5" fill="white" />
+        <Circle cx="37" cy="35" r="1.5" fill="white" opacity="0.8" />
+        <Circle cx="61" cy="35" r="1.5" fill="white" opacity="0.8" />
+
+        {/* Cute button nose - more prominent */}
+        <Ellipse
+          cx="50"
+          cy="44"
+          rx="5"
+          ry="6"
+          fill="#5A7A9A"
+        />
+
+        {/* Big happy smile */}
+        <Path
+          d="M 37 50 Q 50 58, 63 50"
+          stroke="#4A6B8A"
+          strokeWidth="3"
+          fill="none"
+          strokeLinecap="round"
+        />
+
+        {/* Extra rosy cheeks - more visible */}
+        <Circle cx="30" cy="44" r="6" fill="#FF9AA2" opacity="0.6" />
+        <Circle cx="70" cy="44" r="6" fill="#FF9AA2" opacity="0.6" />
+
+        {/* Small freckles/dots for Norwegian charm */}
+        <Circle cx="35" cy="39" r="1" fill="#5A7A9A" opacity="0.4" />
+        <Circle cx="65" cy="39" r="1" fill="#5A7A9A" opacity="0.4" />
+
+        {/* Arms - chubby and cute */}
+        <Ellipse
+          cx="18"
+          cy="62"
+          rx="9"
           ry="22"
-          fill="#A8B8D8"
-        />
-
-        {/* Head */}
-        <Circle
-          cx="50"
-          cy="35"
-          r="28"
-          fill="#8B9DC3"
-        />
-
-        {/* Left ear */}
-        <Circle
-          cx="28"
-          cy="32"
-          r="10"
-          fill="#7A8AB0"
-        />
-
-        {/* Right ear */}
-        <Circle
-          cx="72"
-          cy="32"
-          r="10"
-          fill="#7A8AB0"
-        />
-
-        {/* Hair tuft - wild nordic troll hair */}
-        <Path
-          d="M 45 12 Q 42 5, 40 8 Q 38 5, 36 9 Q 34 4, 32 10"
-          stroke="#556B8E"
-          strokeWidth="3"
-          fill="none"
-          strokeLinecap="round"
-        />
-        <Path
-          d="M 50 10 Q 48 3, 46 6 Q 44 2, 42 8"
-          stroke="#556B8E"
-          strokeWidth="3"
-          fill="none"
-          strokeLinecap="round"
-        />
-        <Path
-          d="M 55 12 Q 58 5, 60 8 Q 62 5, 64 9 Q 66 4, 68 10"
-          stroke="#556B8E"
-          strokeWidth="3"
-          fill="none"
-          strokeLinecap="round"
-        />
-
-        {/* Eyes - big cute eyes */}
-        <Circle cx="40" cy="32" r="6" fill="white" />
-        <Circle cx="60" cy="32" r="6" fill="white" />
-        <Circle cx="41" cy="33" r="4" fill="#2D3748" />
-        <Circle cx="61" cy="33" r="4" fill="#2D3748" />
-        <Circle cx="42" cy="31" r="2" fill="white" />
-        <Circle cx="62" cy="31" r="2" fill="white" />
-
-        {/* Nose - small cute button nose */}
-        <Ellipse
-          cx="50"
-          cy="42"
-          rx="4"
-          ry="5"
-          fill="#7A8AB0"
-        />
-
-        {/* Smile */}
-        <Path
-          d="M 40 48 Q 50 54, 60 48"
-          stroke="#556B8E"
-          strokeWidth="2.5"
-          fill="none"
-          strokeLinecap="round"
-        />
-
-        {/* Rosy cheeks */}
-        <Circle cx="32" cy="42" r="5" fill="#E07B9F" opacity="0.5" />
-        <Circle cx="68" cy="42" r="5" fill="#E07B9F" opacity="0.5" />
-
-        {/* Arms */}
-        <Ellipse
-          cx="20"
-          cy="60"
-          rx="8"
-          ry="20"
-          fill="#7A8AB0"
-          transform="rotate(-20 20 60)"
+          fill="#6A8BB5"
+          transform="rotate(-25 18 62)"
         />
         <Ellipse
-          cx="80"
-          cy="60"
-          rx="8"
-          ry="20"
-          fill="#7A8AB0"
-          transform="rotate(20 80 60)"
+          cx="82"
+          cy="62"
+          rx="9"
+          ry="22"
+          fill="#6A8BB5"
+          transform="rotate(25 82 62)"
         />
 
-        {/* Feet */}
+        {/* Hands - small rounded */}
+        <Circle cx="14" cy="78" r="5" fill="#5A7A9A" />
+        <Circle cx="86" cy="78" r="5" fill="#5A7A9A" />
+
+        {/* Feet - bigger and cuter */}
         <Ellipse
-          cx="40"
-          cy="92"
-          rx="10"
-          ry="6"
-          fill="#7A8AB0"
+          cx="38"
+          cy="94"
+          rx="12"
+          ry="7"
+          fill="#6A8BB5"
         />
         <Ellipse
-          cx="60"
-          cy="92"
-          rx="10"
-          ry="6"
-          fill="#7A8AB0"
+          cx="62"
+          cy="94"
+          rx="12"
+          ry="7"
+          fill="#6A8BB5"
         />
+
+        {/* Toes for extra cuteness */}
+        <Circle cx="35" cy="94" r="2" fill="#5A7A9A" />
+        <Circle cx="41" cy="94" r="2" fill="#5A7A9A" />
+        <Circle cx="59" cy="94" r="2" fill="#5A7A9A" />
+        <Circle cx="65" cy="94" r="2" fill="#5A7A9A" />
       </Svg>
     </Animated.View>
   );
