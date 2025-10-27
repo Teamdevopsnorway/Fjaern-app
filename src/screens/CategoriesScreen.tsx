@@ -29,6 +29,9 @@ export const CategoriesScreen = ({ navigation }: { navigation: any }) => {
   const [selectedCategory, setSelectedCategory] = useState<PhotoCategory | null>(null);
   const [selectedPhotos, setSelectedPhotos] = useState<Set<string>>(new Set());
   const [permissionGranted, setPermissionGranted] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const MAX_DISPLAY_PHOTOS = 500; // Limit grid to 500 photos for performance
 
   useEffect(() => {
     checkPermissionsAndLoadPhotos();
@@ -101,26 +104,42 @@ export const CategoriesScreen = ({ navigation }: { navigation: any }) => {
 
   const selectAllInCategory = () => {
     if (!selectedCategory) return;
+
     const allIds = new Set(selectedCategory.photos.map(p => p.id));
     setSelectedPhotos(allIds);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
-  const deleteSelectedPhotos = () => {
+  const deleteSelectedPhotos = async () => {
     if (!selectedCategory) return;
+    if (isDeleting) return; // Prevent double-click
+
+    setIsDeleting(true);
 
     const photosToDelete = selectedCategory.photos.filter(p =>
       selectedPhotos.has(p.id)
     );
 
-    // Mark photos for deletion
-    photosToDelete.forEach(photo => markToDelete(photo));
+    console.log(`Marking ${photosToDelete.length} photos for deletion...`);
+
+    // Mark photos in chunks to avoid freezing
+    const CHUNK_SIZE = 100;
+    for (let i = 0; i < photosToDelete.length; i += CHUNK_SIZE) {
+      const chunk = photosToDelete.slice(i, i + CHUNK_SIZE);
+      chunk.forEach(photo => markToDelete(photo));
+
+      // Give UI time to breathe
+      await new Promise(resolve => setTimeout(resolve, 10));
+    }
+
+    console.log(`Successfully marked ${photosToDelete.length} photos for deletion`);
 
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
     // Close modal and refresh
     setSelectedCategory(null);
     setSelectedPhotos(new Set());
+    setIsDeleting(false);
 
     // Show success message and navigate
     setTimeout(() => {
@@ -300,6 +319,11 @@ export const CategoriesScreen = ({ navigation }: { navigation: any }) => {
                 <Text style={styles.modalStatsText}>
                   {selectedPhotos.size} av {selectedCategory.photos.length} valgt
                 </Text>
+                {selectedCategory.photos.length > MAX_DISPLAY_PHOTOS && (
+                  <Text style={styles.modalWarningText}>
+                    ⚠️ Viser kun første {MAX_DISPLAY_PHOTOS} bilder. &quot;Velg alle&quot; velger ALLE {selectedCategory.photos.length} bilder.
+                  </Text>
+                )}
                 {selectedPhotos.size > 0 && (
                   <Text style={styles.modalSavingsText}>
                     Sparer: {formatBytes((selectedPhotos.size / selectedCategory.photos.length) * selectedCategory.potentialSavings)}
@@ -308,9 +332,13 @@ export const CategoriesScreen = ({ navigation }: { navigation: any }) => {
               </View>
 
               <FlatList
-                data={selectedCategory.photos}
+                data={selectedCategory.photos.slice(0, MAX_DISPLAY_PHOTOS)}
                 numColumns={3}
                 keyExtractor={(item) => item.id}
+                maxToRenderPerBatch={30}
+                windowSize={5}
+                removeClippedSubviews={true}
+                initialNumToRender={30}
                 renderItem={({ item }) => {
                   const isSelected = selectedPhotos.has(item.id);
                   return (
@@ -561,6 +589,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 4,
     fontWeight: "600",
+  },
+  modalWarningText: {
+    fontSize: 12,
+    color: "#F59E0B",
+    textAlign: "center",
+    marginTop: 8,
+    fontWeight: "600",
+    paddingHorizontal: 16,
   },
   photoGrid: {
     padding: 4,
