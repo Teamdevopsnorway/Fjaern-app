@@ -365,33 +365,5 @@ export const categorizePhotos = (allPhotos: Photo[]): PhotoCategory[] => {
     });
   }
 
-  // Videos
-  const videos = findVideos(allPhotos);
-  if (videos.length > 0) {
-    categories.push({
-      id: "videos",
-      name: "Videoer",
-      description: `${videos.length} videoer`,
-      photos: videos,
-      icon: "videocam-outline",
-      color: "#10B981", // Green
-      potentialSavings: videos.length * 10 * 1024 * 1024, // Estimate 10MB each
-    });
-  }
-
-  // Large videos
-  const largeVideos = findLargeVideos(allPhotos, 50);
-  if (largeVideos.length > 0) {
-    categories.push({
-      id: "large-videos",
-      name: "Store Videoer",
-      description: `${largeVideos.length} videoer over 50MB`,
-      photos: largeVideos,
-      icon: "film-outline",
-      color: "#F59E0B", // Orange
-      potentialSavings: largeVideos.reduce((sum, v) => sum + (v.fileSize || 100 * 1024 * 1024), 0),
-    });
-  }
-
   return categories;
 };
