@@ -9,7 +9,7 @@ import { usePhotoStore } from "../state/photoStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
 
-const SwipeScreenComponent: React.FC<{ navigation: any }> = ({ navigation }) => {
+function SwipeScreenComponent({ navigation }: { navigation: any }) {
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
@@ -350,7 +350,9 @@ const SwipeScreenComponent: React.FC<{ navigation: any }> = ({ navigation }) => 
       </LinearGradient>
     </View>
   );
-};
+}
 
-// Export with a simple wrapper to avoid NativeWind interop issues
-export const SwipeScreen = (props: any) => <SwipeScreenComponent {...props} />;
+// Export as simple function component to avoid NativeWind interop
+export const SwipeScreen = React.memo(function SwipeScreen({ navigation }: any) {
+  return <SwipeScreenComponent navigation={navigation} />;
+});

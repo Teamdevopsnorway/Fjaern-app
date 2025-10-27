@@ -7,7 +7,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AppNavigator } from "./src/navigation/AppNavigator";
 import "./src/utils/appVersion";
 
-// App v2 - Fixed navigation context
+// App v3 - Function component exports for screens
 
 /*
 IMPORTANT NOTICE: DO NOT REMOVE

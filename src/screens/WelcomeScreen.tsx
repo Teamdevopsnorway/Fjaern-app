@@ -29,7 +29,7 @@ const features = [
   },
 ];
 
-const WelcomeScreenComponent: React.FC<{ navigation: any }> = ({ navigation }) => {
+function WelcomeScreenComponent({ navigation }: { navigation: any }) {
   const insets = useSafeAreaInsets();
 
   const handleGetStarted = () => {
@@ -140,7 +140,9 @@ const WelcomeScreenComponent: React.FC<{ navigation: any }> = ({ navigation }) =
       </LinearGradient>
     </View>
   );
-};
+}
 
-// Export with a simple wrapper to avoid NativeWind interop issues
-export const WelcomeScreen = (props: any) => <WelcomeScreenComponent {...props} />;
+// Export as simple function component to avoid NativeWind interop
+export const WelcomeScreen = React.memo(function WelcomeScreen({ navigation }: any) {
+  return <WelcomeScreenComponent navigation={navigation} />;
+});
