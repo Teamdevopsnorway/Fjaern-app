@@ -1,6 +1,10 @@
-# Photo Cleaner App
+# Fjærn - Nordisk Foto Rydde-App
 
-A beautiful, intuitive photo cleanup app inspired by Tinder-style swiping. Quickly organize your photo library by swiping right to keep photos and left to delete them.
+En vakker, intuitiv foto-rydde app med et søtt norsk troll som følgesvenn. Rydd opp i fotobiblioteket ditt på en morsom og motiverende måte med Tinder-stil swiping!
+
+## Oversikt
+
+**Fjærn** (norsk for "fjerne") er en gamifisert foto-rydde app som gjør det gøy å organisere bildene dine. Med et søtt troll-avatar, streak-system, og feiringer hver 10. bilde, blir rydding av fotobiblioteket en dopamin-skapende opplevelse!
 
 ## Features
 
@@ -145,13 +149,16 @@ Using Zustand with AsyncStorage persistence for:
 
 ### 🎉 Nordisk Design & Dopamin-Gamification - FERDIG!
 
+**Fjærn er nå komplett med nordisk design og motiverende gamification!**
+
 **Nyeste endringer:**
-1. ✅ **Søtt Norsk Troll-Avatar** - Et koselig troll som animerer og heier på deg!
-2. ✅ **Nordisk Fargepalett** - Lys blå og turkis inspirert av norsk natur (#E8F4F8, #B8D4E0, #2C5F7C)
-3. ✅ **Streak System** - Hold streken din ved å rydde hver dag med flamme-ikon
-4. ✅ **Milepæls-feiring** - Hver 10. bilde får du konfetti og feiring! 🎉
-5. ✅ **Stats i Sanntid** - Se hvor mye plass du har spart i dag
-6. ✅ **Dopamin-opplevelser** - Trollet animerer, streaks vises, og feiringer motiverer!
+1. ✅ **App navn: Fjærn** - Elegant norsk navn som betyr "å fjerne"
+2. ✅ **Søtt Norsk Troll-Avatar** - Et koselig troll som animerer og heier på deg!
+3. ✅ **Nordisk Fargepalett** - Lys blå og turkis inspirert av norsk natur (#E8F4F8, #B8D4E0, #2C5F7C)
+4. ✅ **Streak System** - Hold streken din ved å rydde hver dag med flamme-ikon
+5. ✅ **Milepæls-feiring** - Hver 10. bilde får du konfetti og feiring! 🎉
+6. ✅ **Stats i Sanntid** - Se hvor mye plass du har spart i dag
+7. ✅ **Dopamin-opplevelser** - Trollet animerer, streaks vises, og feiringer motiverer!
 
 **Nye Komponenter:**
 - **TrollAvatar.tsx** - SVG-basert søtt troll med animasjoner
@@ -159,7 +166,7 @@ Using Zustand with AsyncStorage persistence for:
 - **gamificationStore.ts** - Zustand store for streaks, stats og milepæler
 
 **Oppdaterte Skjermer:**
-- **WelcomeScreenNew** - "Trollrydder" med nordisk design og troll-avatar
+- **WelcomeScreenNew** - "Fjærn" med nordisk design og troll-avatar
 - **SwipeScreenNew** - Trollet i header, streak badge, daglige stats, og feiring
 - **ReviewScreenNew** - Nordisk fargepalett på stats card
 
@@ -221,4 +228,4 @@ For screen components that receive navigation props in React Navigation, use **i
 
 ## Notes
 
-This app follows Apple's Human Interface Guidelines for a native iOS feel. All interactions are designed to be intuitive and delightful, making the tedious task of photo cleanup actually enjoyable.
+**Fjærn** følger Apple's Human Interface Guidelines for en native iOS-følelse. Alle interaksjoner er designet for å være intuitive og gledelige, og gjør den kjedelige oppgaven med å rydde i bilder til en morsom opplevelse med et søtt norsk troll som følgesvenn! 🇳🇴🧌

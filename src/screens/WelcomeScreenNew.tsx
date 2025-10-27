@@ -25,7 +25,7 @@ export function WelcomeScreenNew(props: any) {
             <View style={styles.trollAvatarContainer}>
               <TrollAvatar size={120} animate={true} />
             </View>
-            <Text style={styles.title}>Trollrydder</Text>
+            <Text style={styles.title}>Fjærn</Text>
             <Text style={styles.subtitle}>La trollet hjelpe deg å rydde i bildene! 🇳🇴</Text>
           </View>
 
