@@ -5,13 +5,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { usePhotoStore } from "../state/photoStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
+import { RootStackParamList } from "../navigation/AppNavigator";
 
-interface SwipeScreenProps {
-  navigation: any;
-}
+type SwipeScreenProps = NativeStackScreenProps<RootStackParamList, "Swipe">;
 
 export const SwipeScreen: React.FC<SwipeScreenProps> = ({ navigation }) => {
   const insets = useSafeAreaInsets();

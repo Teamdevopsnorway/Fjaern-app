@@ -14,15 +14,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { usePhotoStore } from "../state/photoStore";
 import { deletePhotos, formatBytes } from "../utils/photoUtils";
+import { RootStackParamList } from "../navigation/AppNavigator";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const IMAGE_SIZE = (SCREEN_WIDTH - 48) / 3;
 
-interface ReviewScreenProps {
-  navigation: any;
-}
+type ReviewScreenProps = NativeStackScreenProps<RootStackParamList, "Review">;
 
 export const ReviewScreen: React.FC<ReviewScreenProps> = ({ navigation }) => {
   const insets = useSafeAreaInsets();

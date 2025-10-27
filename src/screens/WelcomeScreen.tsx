@@ -5,12 +5,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../navigation/AppNavigator";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-interface WelcomeScreenProps {
-  navigation: any;
-}
+type WelcomeScreenProps = NativeStackScreenProps<RootStackParamList, "Welcome">;
 
 const features = [
   {
