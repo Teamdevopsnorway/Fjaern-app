@@ -50,6 +50,9 @@ export const usePhotoStore = create<PhotoState>()(
         set({
           allPhotos: photos,
           currentIndex: 0,
+          photosToDelete: [],
+          photosToKeep: [],
+          lastDeletedPhoto: null,
           stats: {
             totalPhotos: photos.length,
             reviewedPhotos: 0,
