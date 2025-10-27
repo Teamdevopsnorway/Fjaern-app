@@ -161,27 +161,27 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
         <Circle cx="35" cy="39" r="1" fill="#5A7A9A" opacity="0.4" />
         <Circle cx="65" cy="39" r="1" fill="#5A7A9A" opacity="0.4" />
 
-        {/* Arms - chubby and cute */}
+        {/* Arms - chubby and cute, better positioned */}
         <Ellipse
-          cx="18"
-          cy="62"
-          rx="9"
-          ry="22"
+          cx="22"
+          cy="65"
+          rx="8"
+          ry="18"
           fill="#6A8BB5"
-          transform="rotate(-25 18 62)"
+          transform="rotate(-15 22 65)"
         />
         <Ellipse
-          cx="82"
-          cy="62"
-          rx="9"
-          ry="22"
+          cx="78"
+          cy="65"
+          rx="8"
+          ry="18"
           fill="#6A8BB5"
-          transform="rotate(25 82 62)"
+          transform="rotate(15 78 65)"
         />
 
         {/* Hands - small rounded */}
-        <Circle cx="14" cy="78" r="5" fill="#5A7A9A" />
-        <Circle cx="86" cy="78" r="5" fill="#5A7A9A" />
+        <Circle cx="18" cy="80" r="5" fill="#5A7A9A" />
+        <Circle cx="82" cy="80" r="5" fill="#5A7A9A" />
 
         {/* Feet - bigger and cuter */}
         <Ellipse
