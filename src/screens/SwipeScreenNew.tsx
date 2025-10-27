@@ -11,7 +11,7 @@ import { SwipeCard } from "../components/SwipeCard";
 import { CelebrationModal } from "../components/CelebrationModal";
 import { DailyGoalCelebrationModal } from "../components/DailyGoalCelebrationModal";
 import { TrollAvatar } from "../components/TrollAvatar";
-import { loadPhotos, requestPermissions } from "../utils/photoUtils";
+import { loadPhotos, requestPermissions, getPhotoFileSize } from "../utils/photoUtils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -67,14 +67,17 @@ export function SwipeScreenNew(props: any) {
     setIsLoading(false);
   };
 
-  const handleSwipeLeft = () => {
+  const handleSwipeLeft = async () => {
     const photo = getCurrentPhoto();
     if (photo) {
       // Delete the photo
       markToDelete(photo);
 
+      // Get actual file size
+      const fileSize = await getPhotoFileSize(photo.uri);
+
       // Gamification: increment and check for milestone and daily goal
-      const result = incrementPhotosCleaned(2 * 1024 * 1024); // 2MB estimate
+      const result = incrementPhotosCleaned(fileSize);
 
       // Check milestone first
       if (result.milestone) {

@@ -9,6 +9,7 @@ export interface Photo {
   duration: number;
   mediaType: "photo" | "video";
   mediaSubtypes?: string[];
+  fileSize?: number; // File size in bytes
 }
 
 export interface PhotoStats {
