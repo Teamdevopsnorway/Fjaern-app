@@ -17,6 +17,10 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export function SwipeScreenNew(props: any) {
   const navigation = props.navigation;
+  const route = props.route;
+  const fromCategories = route?.params?.fromCategories || false;
+  const categoryName = route?.params?.categoryName || "";
+
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -224,15 +228,30 @@ export function SwipeScreenNew(props: any) {
           {/* Header with Stats */}
           <View style={styles.header}>
             <View style={styles.headerContent}>
-              <View style={styles.headerLeft}>
-                <TrollAvatar size={50} animate={todaysPhotosDeleted > 0} />
-                <View style={styles.headerTextContainer}>
-                  <Text style={styles.headerTitle}>Rydd Opp</Text>
-                  <Text style={styles.headerSubtitle}>
-                    {currentIndex + 1} / {allPhotos.length} bilder
-                  </Text>
+              {fromCategories ? (
+                <Pressable
+                  onPress={() => navigation.goBack()}
+                  style={styles.backButton}
+                >
+                  <Ionicons name="arrow-back" size={28} color="#1E40AF" />
+                  <View style={styles.headerTextContainer}>
+                    <Text style={styles.headerTitle}>{categoryName}</Text>
+                    <Text style={styles.headerSubtitle}>
+                      {currentIndex + 1} / {allPhotos.length} bilder
+                    </Text>
+                  </View>
+                </Pressable>
+              ) : (
+                <View style={styles.headerLeft}>
+                  <TrollAvatar size={50} animate={todaysPhotosDeleted > 0} />
+                  <View style={styles.headerTextContainer}>
+                    <Text style={styles.headerTitle}>Rydd Opp</Text>
+                    <Text style={styles.headerSubtitle}>
+                      {currentIndex + 1} / {allPhotos.length} bilder
+                    </Text>
+                  </View>
                 </View>
-              </View>
+              )}
 
               <View style={styles.headerRight}>
                 {currentStreak > 0 && (
@@ -483,6 +502,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  backButton: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
