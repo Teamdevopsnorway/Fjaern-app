@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, ActivityIndicator, Alert } from "react-native";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { usePhotoStore } from "../state/photoStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
 import { RootStackParamList } from "../navigation/AppNavigator";
 
-type SwipeScreenProps = NativeStackScreenProps<RootStackParamList, "Swipe">;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, "Swipe">;
 
-export const SwipeScreen: React.FC<SwipeScreenProps> = ({ navigation }) => {
+export const SwipeScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
