@@ -11,15 +11,19 @@ interface GamificationStats {
   milestonesReached: number[];
   todaysPhotosDeleted: number;
   todaysSpaceSaved: number;
+  dailyGoal: number; // User's daily goal (0 = no goal)
+  dailyGoalReached: boolean;
 }
 
 interface GamificationState extends GamificationStats {
   // Actions
-  incrementPhotosCleaned: (spaceFreed: number) => { milestone: boolean; milestoneNumber: number };
+  incrementPhotosCleaned: (spaceFreed: number) => { milestone: boolean; milestoneNumber: number; dailyGoalReached: boolean };
   updateStreak: () => void;
   resetDailyStats: () => void;
   getSpaceSavedFormatted: () => string;
   getTodaySpaceSavedFormatted: () => string;
+  setDailyGoal: (goal: number) => void;
+  getDailyProgress: () => { current: number; goal: number; percentage: number };
 }
 
 const MILESTONE_INTERVAL = 10; // Celebrate every 10 photos
@@ -36,6 +40,8 @@ export const useGamificationStore = create<GamificationState>()(
       milestonesReached: [],
       todaysPhotosDeleted: 0,
       todaysSpaceSaved: 0,
+      dailyGoal: 0, // 0 means no goal set
+      dailyGoalReached: false,
 
       // Actions
       incrementPhotosCleaned: (spaceFreed: number) => {
@@ -47,6 +53,12 @@ export const useGamificationStore = create<GamificationState>()(
         const milestone = newTotal % MILESTONE_INTERVAL === 0;
         const milestoneNumber = milestone ? newTotal : 0;
 
+        // Check if daily goal reached
+        const dailyGoalJustReached =
+          state.dailyGoal > 0 &&
+          !state.dailyGoalReached &&
+          newTodayTotal >= state.dailyGoal;
+
         set({
           totalPhotosCleaned: newTotal,
           totalSpaceSaved: state.totalSpaceSaved + spaceFreed,
@@ -55,9 +67,10 @@ export const useGamificationStore = create<GamificationState>()(
           milestonesReached: milestone
             ? [...state.milestonesReached, milestoneNumber]
             : state.milestonesReached,
+          dailyGoalReached: dailyGoalJustReached || state.dailyGoalReached,
         });
 
-        return { milestone, milestoneNumber };
+        return { milestone, milestoneNumber, dailyGoalReached: dailyGoalJustReached };
       },
 
       updateStreak: () => {
@@ -93,6 +106,7 @@ export const useGamificationStore = create<GamificationState>()(
           set({
             todaysPhotosDeleted: 0,
             todaysSpaceSaved: 0,
+            dailyGoalReached: false,
           });
         }
       },
@@ -105,6 +119,18 @@ export const useGamificationStore = create<GamificationState>()(
       getTodaySpaceSavedFormatted: () => {
         const bytes = get().todaysSpaceSaved;
         return formatBytes(bytes);
+      },
+
+      setDailyGoal: (goal: number) => {
+        set({ dailyGoal: goal });
+      },
+
+      getDailyProgress: () => {
+        const state = get();
+        const current = state.todaysPhotosDeleted;
+        const goal = state.dailyGoal;
+        const percentage = goal > 0 ? Math.min((current / goal) * 100, 100) : 0;
+        return { current, goal, percentage };
       },
     }),
     {

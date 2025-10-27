@@ -10,6 +10,7 @@ import { useGamificationStore } from "../state/gamificationStore";
 import { useSubscriptionStore } from "../state/subscriptionStore";
 import { SwipeCard } from "../components/SwipeCard";
 import { CelebrationModal } from "../components/CelebrationModal";
+import { DailyGoalCelebrationModal } from "../components/DailyGoalCelebrationModal";
 import { PaywallModal } from "../components/PaywallModal";
 import { TrollAvatar } from "../components/TrollAvatar";
 import { loadPhotos, requestPermissions } from "../utils/photoUtils";
@@ -24,6 +25,7 @@ export function SwipeScreenNew(props: any) {
   const [showCelebration, setShowCelebration] = useState(false);
   const [currentMilestone, setCurrentMilestone] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showDailyGoalCelebration, setShowDailyGoalCelebration] = useState(false);
 
   const {
     allPhotos,
@@ -40,10 +42,12 @@ export function SwipeScreenNew(props: any) {
   const {
     currentStreak,
     todaysPhotosDeleted,
+    dailyGoal,
     incrementPhotosCleaned,
     updateStreak,
     resetDailyStats,
     getTodaySpaceSavedFormatted,
+    getDailyProgress,
   } = useGamificationStore();
 
   const {
@@ -84,11 +88,22 @@ export function SwipeScreenNew(props: any) {
 
       markToDelete(photo);
 
-      // Gamification: increment and check for milestone
+      // Gamification: increment and check for milestone and daily goal
       const result = incrementPhotosCleaned(2 * 1024 * 1024); // 2MB estimate
+
+      // Check milestone first
       if (result.milestone) {
         setCurrentMilestone(result.milestoneNumber);
         setShowCelebration(true);
+      }
+
+      // Check if daily goal just reached (takes priority over milestone)
+      if (result.dailyGoalReached) {
+        setShowDailyGoalCelebration(true);
+        // If both milestone and daily goal, show daily goal celebration
+        if (result.milestone) {
+          setShowCelebration(false);
+        }
       }
     }
   };
@@ -262,7 +277,7 @@ export function SwipeScreenNew(props: any) {
             </View>
 
             {/* Stats Row */}
-            {(todaysPhotosDeleted > 0 || !isPro) && (
+            {(todaysPhotosDeleted > 0 || !isPro || dailyGoal > 0) && (
               <View style={styles.statsRow}>
                 {todaysPhotosDeleted > 0 && (
                   <>
@@ -275,6 +290,16 @@ export function SwipeScreenNew(props: any) {
                       <Text style={styles.statText}>{getTodaySpaceSavedFormatted()} spart</Text>
                     </View>
                   </>
+                )}
+
+                {/* Daily goal progress */}
+                {dailyGoal > 0 && (
+                  <View style={styles.goalBadge}>
+                    <Ionicons name="flag" size={14} color="#FFA000" />
+                    <Text style={styles.goalText}>
+                      {todaysPhotosDeleted}/{dailyGoal}
+                    </Text>
+                  </View>
                 )}
 
                 {/* Free tier indicator */}
@@ -383,6 +408,15 @@ export function SwipeScreenNew(props: any) {
         visible={showPaywall}
         onClose={() => setShowPaywall(false)}
         onUpgrade={handleUpgradeToPro}
+      />
+
+      {/* Daily Goal Celebration Modal */}
+      <DailyGoalCelebrationModal
+        visible={showDailyGoalCelebration}
+        onClose={() => setShowDailyGoalCelebration(false)}
+        goalNumber={dailyGoal}
+        todayTotal={todaysPhotosDeleted}
+        spaceSaved={getTodaySpaceSavedFormatted()}
       />
     </View>
   );
@@ -555,6 +589,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "700",
     color: "#B8860B",
+  },
+  goalBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 160, 0, 0.2)",
+    borderRadius: 100,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: "#FFA000",
+  },
+  goalText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: "#E65100",
   },
   headerTitle: {
     fontSize: 24,
