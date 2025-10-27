@@ -153,7 +153,7 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({
             >
               <View style={styles.overlayContent}>
                 <Ionicons name="trash" size={60} color="white" />
-                <Text style={styles.overlayText}>Delete</Text>
+                <Text style={styles.overlayText}>Slett</Text>
               </View>
             </LinearGradient>
           </Animated.View>
@@ -166,7 +166,7 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({
             >
               <View style={styles.overlayContent}>
                 <Ionicons name="heart" size={60} color="white" />
-                <Text style={styles.overlayText}>Keep</Text>
+                <Text style={styles.overlayText}>Behold</Text>
               </View>
             </LinearGradient>
           </Animated.View>
@@ -205,8 +205,8 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     position: "absolute",
-    width: SCREEN_WIDTH - 40,
-    height: SCREEN_HEIGHT * 0.7,
+    width: SCREEN_WIDTH - 60,
+    height: SCREEN_HEIGHT * 0.6,
     alignSelf: "center",
   },
   cardInner: {

@@ -143,6 +143,21 @@ Using Zustand with AsyncStorage persistence for:
 
 ## Recent Updates
 
+### ✅ Norwegian Language & Improved Layout - COMPLETE!
+
+**Changes:**
+1. ✅ **Photo cards made smaller** - Reduced from 70% to 60% screen height with more horizontal margin for better fit
+2. ✅ **Complete Norwegian translation** - All UI text translated to Norwegian across all screens
+3. ✅ All features still working perfectly
+
+**Translated Screens:**
+- **WelcomeScreenNew** - "Fotorydder" with Norwegian feature descriptions
+- **SwipeScreenNew** - "Rydd Opp" with Norwegian instructions and states
+- **ReviewScreenNew** - "Gjennomgang & Slett" with Norwegian labels and confirmation
+- **SwipeCard** - "Slett" and "Behold" overlay text in Norwegian
+
+---
+
 ### 🎉 MVP COMPLETE - READY FOR TESTING!
 
 **The full photo cleanup app is now working perfectly!** ✅

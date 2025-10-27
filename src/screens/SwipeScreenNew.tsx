@@ -96,7 +96,7 @@ export function SwipeScreenNew(props: any) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#8B5CF6" />
-        <Text style={styles.loadingText}>Loading your photos...</Text>
+        <Text style={styles.loadingText}>Laster inn bildene dine...</Text>
       </View>
     );
   }
@@ -106,10 +106,10 @@ export function SwipeScreenNew(props: any) {
     return (
       <View style={styles.centerContainer}>
         <Ionicons name="images-outline" size={80} color="#8B5CF6" />
-        <Text style={styles.permissionTitle}>Photo Access Required</Text>
+        <Text style={styles.permissionTitle}>Fototilgang Påkrevd</Text>
         <Text style={styles.permissionText}>
-          We need access to your photo library to help you clean up unwanted photos.
-          Your photos stay private and secure on your device.
+          Vi trenger tilgang til fotobiblioteket ditt for å hjelpe deg med å rydde opp i uønskede bilder.
+          Bildene dine forblir private og trygge på enheten din.
         </Text>
         <Pressable onPress={handleRequestPermission} style={styles.permissionButton}>
           <LinearGradient
@@ -118,7 +118,7 @@ export function SwipeScreenNew(props: any) {
             end={{ x: 1, y: 0 }}
             style={styles.permissionGradient}
           >
-            <Text style={styles.permissionButtonText}>Grant Access</Text>
+            <Text style={styles.permissionButtonText}>Gi Tilgang</Text>
           </LinearGradient>
         </Pressable>
       </View>
@@ -130,9 +130,9 @@ export function SwipeScreenNew(props: any) {
     return (
       <View style={styles.centerContainer}>
         <Ionicons name="checkmark-circle-outline" size={80} color="#10B981" />
-        <Text style={styles.emptyTitle}>No Photos Found</Text>
+        <Text style={styles.emptyTitle}>Ingen Bilder Funnet</Text>
         <Text style={styles.emptyText}>
-          Your photo library is empty or all photos have been reviewed.
+          Fotobiblioteket ditt er tomt eller alle bilder er gjennomgått.
         </Text>
       </View>
     );
@@ -143,9 +143,9 @@ export function SwipeScreenNew(props: any) {
     return (
       <View style={styles.centerContainer}>
         <Ionicons name="checkmark-circle" size={80} color="#10B981" />
-        <Text style={styles.doneTitle}>All Done!</Text>
+        <Text style={styles.doneTitle}>Ferdig!</Text>
         <Text style={styles.doneText}>
-          You have reviewed all {allPhotos.length} photos in your library.
+          Du har gjennomgått alle {allPhotos.length} bilder i biblioteket ditt.
         </Text>
         {photosToDelete.length > 0 && (
           <Pressable onPress={handleReview} style={styles.reviewButtonContainer}>
@@ -156,7 +156,7 @@ export function SwipeScreenNew(props: any) {
               style={styles.reviewGradient}
             >
               <Text style={styles.reviewButtonText}>
-                Review {photosToDelete.length} Photos to Delete
+                Se Gjennom {photosToDelete.length} Bilder å Slette
               </Text>
             </LinearGradient>
           </Pressable>
@@ -182,9 +182,9 @@ export function SwipeScreenNew(props: any) {
           <View style={styles.header}>
             <View style={styles.headerContent}>
               <View>
-                <Text style={styles.headerTitle}>Clean Up</Text>
+                <Text style={styles.headerTitle}>Rydd Opp</Text>
                 <Text style={styles.headerSubtitle}>
-                  {currentIndex + 1} / {allPhotos.length} photos
+                  {currentIndex + 1} / {allPhotos.length} bilder
                 </Text>
               </View>
 
@@ -272,7 +272,7 @@ export function SwipeScreenNew(props: any) {
               </Pressable>
             </View>
 
-            <Text style={styles.hintText}>Swipe left to delete • Swipe right to keep</Text>
+            <Text style={styles.hintText}>Swipe venstre for å slette • Swipe høyre for å beholde</Text>
           </BlurView>
         </SafeAreaView>
       </LinearGradient>

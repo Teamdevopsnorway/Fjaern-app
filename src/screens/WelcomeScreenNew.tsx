@@ -24,8 +24,8 @@ export function WelcomeScreenNew(props: any) {
             <View style={styles.iconContainer}>
               <Ionicons name="images" size={48} color="#8B5CF6" />
             </View>
-            <Text style={styles.title}>Photo Cleaner</Text>
-            <Text style={styles.subtitle}>Clean up your photo library the fun way</Text>
+            <Text style={styles.title}>Fotorydder</Text>
+            <Text style={styles.subtitle}>Rydd opp i fotobiblioteket ditt på en morsom måte</Text>
           </View>
 
           {/* Features */}
@@ -35,9 +35,9 @@ export function WelcomeScreenNew(props: any) {
                 <Ionicons name="finger-print" size={24} color="white" />
               </View>
               <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Swipe to Organize</Text>
+                <Text style={styles.featureTitle}>Swipe for å Organisere</Text>
                 <Text style={styles.featureDescription}>
-                  Swipe right to keep, left to delete. It&apos;s that simple!
+                  Swipe høyre for å beholde, venstre for å slette. Så enkelt er det!
                 </Text>
               </View>
             </View>
@@ -47,9 +47,9 @@ export function WelcomeScreenNew(props: any) {
                 <Ionicons name="shield-checkmark" size={24} color="white" />
               </View>
               <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>100% Private</Text>
+                <Text style={styles.featureTitle}>100% Privat</Text>
                 <Text style={styles.featureDescription}>
-                  All processing happens on your device. Your photos never leave.
+                  All behandling skjer på din enhet. Bildene dine forlater aldri telefonen.
                 </Text>
               </View>
             </View>
@@ -59,9 +59,9 @@ export function WelcomeScreenNew(props: any) {
                 <Ionicons name="flash" size={24} color="white" />
               </View>
               <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Lightning Fast</Text>
+                <Text style={styles.featureTitle}>Lynraskt</Text>
                 <Text style={styles.featureDescription}>
-                  Clean up hundreds of photos in minutes, not hours.
+                  Rydd opp i hundrevis av bilder på minutter, ikke timer.
                 </Text>
               </View>
             </View>
@@ -72,11 +72,11 @@ export function WelcomeScreenNew(props: any) {
             onPress={handleGetStarted}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>Get Started</Text>
+            <Text style={styles.buttonText}>Kom i Gang</Text>
           </Pressable>
 
           <Text style={styles.disclaimer}>
-            By continuing, you agree to grant photo library access
+            Ved å fortsette godtar du å gi tilgang til fotobiblioteket
           </Text>
         </View>
       </LinearGradient>

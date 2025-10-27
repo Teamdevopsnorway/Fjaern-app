@@ -77,15 +77,15 @@ export function ReviewScreenNew(props: any) {
               >
                 <Ionicons name="arrow-back" size={24} color="#1F2937" />
               </Pressable>
-              <Text style={styles.headerTitle}>Review</Text>
+              <Text style={styles.headerTitle}>Gjennomgang</Text>
             </View>
           </View>
 
           <View style={styles.emptyContainer}>
             <Ionicons name="checkmark-circle-outline" size={80} color="#10B981" />
-            <Text style={styles.emptyTitle}>No Photos to Delete</Text>
+            <Text style={styles.emptyTitle}>Ingen Bilder å Slette</Text>
             <Text style={styles.emptyText}>
-              Start swiping to mark photos for deletion.
+              Start å swipe for å markere bilder for sletting.
             </Text>
           </View>
         </SafeAreaView>
@@ -107,9 +107,9 @@ export function ReviewScreenNew(props: any) {
                 <Ionicons name="arrow-back" size={24} color="#1F2937" />
               </Pressable>
               <View>
-                <Text style={styles.headerTitle}>Review & Delete</Text>
+                <Text style={styles.headerTitle}>Gjennomgang & Slett</Text>
                 <Text style={styles.headerSubtitle}>
-                  {photosToDelete.length} photos selected
+                  {photosToDelete.length} bilder valgt
                 </Text>
               </View>
             </View>
@@ -127,7 +127,7 @@ export function ReviewScreenNew(props: any) {
             <View style={styles.statsContent}>
               <View style={styles.statsMain}>
                 <View style={styles.statsTextContainer}>
-                  <Text style={styles.statsLabel}>Space to Free</Text>
+                  <Text style={styles.statsLabel}>Plass å Frigjøre</Text>
                   <Text style={styles.statsValue}>
                     {formatBytes(stats.estimatedSpaceFreed)}
                   </Text>
@@ -141,13 +141,13 @@ export function ReviewScreenNew(props: any) {
 
               <View style={styles.statsRow}>
                 <View style={styles.statItem}>
-                  <Text style={styles.statItemLabel}>Photos</Text>
+                  <Text style={styles.statItemLabel}>Bilder</Text>
                   <Text style={styles.statItemValue}>
                     {photosToDelete.length}
                   </Text>
                 </View>
                 <View style={styles.statItem}>
-                  <Text style={styles.statItemLabel}>Videos</Text>
+                  <Text style={styles.statItemLabel}>Videoer</Text>
                   <Text style={styles.statItemValue}>
                     {photosToDelete.filter((p) => p.mediaType === "video").length}
                   </Text>
@@ -186,14 +186,14 @@ export function ReviewScreenNew(props: any) {
                 <View style={styles.deleteAllContent}>
                   <Ionicons name="trash" size={22} color="white" />
                   <Text style={styles.deleteAllText}>
-                    Delete {photosToDelete.length} Photos
+                    Slett {photosToDelete.length} Bilder
                   </Text>
                 </View>
               )}
             </LinearGradient>
           </Pressable>
 
-          <Text style={styles.warningText}>This action cannot be undone</Text>
+          <Text style={styles.warningText}>Denne handlingen kan ikke angres</Text>
         </View>
 
         {/* Confirmation Modal */}
@@ -210,11 +210,11 @@ export function ReviewScreenNew(props: any) {
                   <Ionicons name="warning" size={32} color="#EF4444" />
                 </View>
                 <Text style={styles.modalTitle}>
-                  Delete {photosToDelete.length} Photos?
+                  Slett {photosToDelete.length} Bilder?
                 </Text>
                 <Text style={styles.modalText}>
-                  This will permanently delete the selected photos from your device.
-                  This action cannot be undone.
+                  Dette vil permanent slette de valgte bildene fra enheten din.
+                  Denne handlingen kan ikke angres.
                 </Text>
               </View>
 
@@ -223,7 +223,7 @@ export function ReviewScreenNew(props: any) {
                   onPress={handleDeleteAll}
                   style={styles.modalDeleteButton}
                 >
-                  <Text style={styles.modalDeleteText}>Delete Permanently</Text>
+                  <Text style={styles.modalDeleteText}>Slett Permanent</Text>
                 </Pressable>
 
                 <Pressable
@@ -233,7 +233,7 @@ export function ReviewScreenNew(props: any) {
                   }}
                   style={styles.modalCancelButton}
                 >
-                  <Text style={styles.modalCancelText}>Cancel</Text>
+                  <Text style={styles.modalCancelText}>Avbryt</Text>
                 </Pressable>
               </View>
             </View>
