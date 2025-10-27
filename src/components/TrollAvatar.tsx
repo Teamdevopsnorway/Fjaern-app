@@ -64,133 +64,236 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <Svg width={size} height={size} viewBox="0 0 100 100">
-        {/* Body - cute round shape */}
+        {/* Body - round troll body */}
         <Ellipse
           cx="50"
-          cy="62"
-          rx="34"
-          ry="36"
-          fill="#7B9DC8"
+          cy="65"
+          rx="30"
+          ry="32"
+          fill="#8B7355"
         />
 
-        {/* Belly patch - lighter color with Norwegian touch */}
+        {/* Belly - lighter */}
         <Ellipse
           cx="50"
-          cy="70"
-          rx="22"
-          ry="24"
-          fill="#B0C4DE"
+          cy="72"
+          rx="18"
+          ry="20"
+          fill="#A89482"
         />
 
-        {/* Head - rounder and cuter */}
+        {/* Head - big round head */}
         <Circle
           cx="50"
-          cy="34"
-          r="30"
-          fill="#7B9DC8"
+          cy="38"
+          r="26"
+          fill="#8B7355"
         />
 
-        {/* Fluffy ears - more prominent */}
-        <Circle
-          cx="26"
-          cy="30"
-          r="12"
-          fill="#6A8BB5"
+        {/* Big ears */}
+        <Ellipse
+          cx="24"
+          cy="38"
+          rx="8"
+          ry="12"
+          fill="#8B7355"
         />
-        <Circle
-          cx="74"
-          cy="30"
-          r="12"
-          fill="#6A8BB5"
+        <Ellipse
+          cx="76"
+          cy="38"
+          rx="8"
+          ry="12"
+          fill="#8B7355"
         />
 
-        {/* Wild Nordic troll hair - more chaotic and fun */}
-        <Path
-          d="M 38 10 Q 35 2, 33 6 Q 31 1, 29 7 Q 27 0, 25 8"
-          stroke="#4A6B8A"
-          strokeWidth="3.5"
-          fill="none"
-          strokeLinecap="round"
+        {/* Inner ears - pink */}
+        <Ellipse
+          cx="24"
+          cy="38"
+          rx="4"
+          ry="6"
+          fill="#D4A5A5"
         />
-        <Path
-          d="M 45 8 Q 43 0, 41 5 Q 39 -2, 37 6"
-          stroke="#4A6B8A"
-          strokeWidth="3.5"
-          fill="none"
-          strokeLinecap="round"
+        <Ellipse
+          cx="76"
+          cy="38"
+          rx="4"
+          ry="6"
+          fill="#D4A5A5"
         />
+
+        {/* Wild troll hair - lots of messy hair strands */}
         <Path
-          d="M 50 6 Q 48 -1, 46 4 Q 44 -3, 42 5"
-          stroke="#4A6B8A"
+          d="M 30 18 Q 28 8, 26 12 Q 24 6, 22 14 Q 20 8, 18 16"
+          stroke="#3D3D3D"
           strokeWidth="4"
           fill="none"
           strokeLinecap="round"
         />
         <Path
-          d="M 55 8 Q 57 0, 59 5 Q 61 -2, 63 6"
-          stroke="#4A6B8A"
-          strokeWidth="3.5"
+          d="M 36 15 Q 34 5, 32 10 Q 30 3, 28 12"
+          stroke="#3D3D3D"
+          strokeWidth="4"
           fill="none"
           strokeLinecap="round"
         />
         <Path
-          d="M 62 10 Q 65 2, 67 6 Q 69 1, 71 7 Q 73 0, 75 8"
-          stroke="#4A6B8A"
-          strokeWidth="3.5"
+          d="M 42 13 Q 40 3, 38 8 Q 36 1, 34 10"
+          stroke="#3D3D3D"
+          strokeWidth="4.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 48 12 Q 46 2, 44 7 Q 42 0, 40 9"
+          stroke="#3D3D3D"
+          strokeWidth="4.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 54 12 Q 56 2, 58 7 Q 60 0, 62 9"
+          stroke="#3D3D3D"
+          strokeWidth="4.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 60 13 Q 62 3, 64 8 Q 66 1, 68 10"
+          stroke="#3D3D3D"
+          strokeWidth="4.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 66 15 Q 68 5, 70 10 Q 72 3, 74 12"
+          stroke="#3D3D3D"
+          strokeWidth="4"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 72 18 Q 74 8, 76 12 Q 78 6, 80 14 Q 82 8, 84 16"
+          stroke="#3D3D3D"
+          strokeWidth="4"
           fill="none"
           strokeLinecap="round"
         />
 
-        {/* Eyes - MUCH bigger and cuter! */}
-        <Circle cx="38" cy="32" r="8" fill="white" />
-        <Circle cx="62" cy="32" r="8" fill="white" />
-
-        {/* Pupils - bigger and more expressive */}
-        <Circle cx="39" cy="33" r="5" fill="#2D3748" />
-        <Circle cx="63" cy="33" r="5" fill="#2D3748" />
-
-        {/* Sparkles in eyes */}
-        <Circle cx="41" cy="30" r="2.5" fill="white" />
-        <Circle cx="65" cy="30" r="2.5" fill="white" />
-        <Circle cx="37" cy="35" r="1.5" fill="white" opacity="0.8" />
-        <Circle cx="61" cy="35" r="1.5" fill="white" opacity="0.8" />
-
-        {/* Cute button nose - more prominent */}
-        <Ellipse
-          cx="50"
-          cy="44"
-          rx="5"
-          ry="6"
-          fill="#5A7A9A"
-        />
-
-        {/* Big happy smile */}
+        {/* Hair on sides of head */}
         <Path
-          d="M 37 50 Q 50 58, 63 50"
-          stroke="#4A6B8A"
+          d="M 22 30 Q 18 32, 16 35 Q 14 38, 15 42"
+          stroke="#3D3D3D"
+          strokeWidth="3"
+          fill="none"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 78 30 Q 82 32, 84 35 Q 86 38, 85 42"
+          stroke="#3D3D3D"
           strokeWidth="3"
           fill="none"
           strokeLinecap="round"
         />
 
-        {/* Extra rosy cheeks - more visible */}
-        <Circle cx="30" cy="44" r="6" fill="#FF9AA2" opacity="0.6" />
-        <Circle cx="70" cy="44" r="6" fill="#FF9AA2" opacity="0.6" />
+        {/* Eyes - big expressive eyes */}
+        <Circle cx="40" cy="36" r="7" fill="white" />
+        <Circle cx="60" cy="36" r="7" fill="white" />
 
-        {/* Small freckles/dots for Norwegian charm */}
-        <Circle cx="35" cy="39" r="1" fill="#5A7A9A" opacity="0.4" />
-        <Circle cx="65" cy="39" r="1" fill="#5A7A9A" opacity="0.4" />
+        {/* Pupils - looking friendly */}
+        <Circle cx="41" cy="37" r="4.5" fill="#2D2D2D" />
+        <Circle cx="61" cy="37" r="4.5" fill="#2D2D2D" />
+
+        {/* Eye sparkles */}
+        <Circle cx="43" cy="34" r="2" fill="white" />
+        <Circle cx="63" cy="34" r="2" fill="white" />
+
+        {/* BIG TROLL NOSE - most important feature! */}
+        <Ellipse
+          cx="50"
+          cy="47"
+          rx="8"
+          ry="10"
+          fill="#6B5D4F"
+        />
+
+        {/* Nostrils */}
+        <Ellipse cx="46" cy="50" rx="2" ry="3" fill="#4A4035" />
+        <Ellipse cx="54" cy="50" rx="2" ry="3" fill="#4A4035" />
+
+        {/* Big happy smile with visible teeth */}
+        <Path
+          d="M 38 56 Q 50 64, 62 56"
+          stroke="#4A4035"
+          strokeWidth="2.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+
+        {/* Teeth - troll teeth */}
+        <Path
+          d="M 44 60 L 44 58"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 50 62 L 50 60"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <Path
+          d="M 56 60 L 56 58"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+
+        {/* Rosy cheeks */}
+        <Circle cx="32" cy="48" r="5" fill="#D4A5A5" opacity="0.7" />
+        <Circle cx="68" cy="48" r="5" fill="#D4A5A5" opacity="0.7" />
+
+        {/* Body hair/fur texture */}
+        <Path
+          d="M 30 60 Q 28 65, 26 70"
+          stroke="#6B5D4F"
+          strokeWidth="2"
+          fill="none"
+          opacity="0.4"
+        />
+        <Path
+          d="M 35 62 Q 33 68, 31 74"
+          stroke="#6B5D4F"
+          strokeWidth="2"
+          fill="none"
+          opacity="0.4"
+        />
+        <Path
+          d="M 65 62 Q 67 68, 69 74"
+          stroke="#6B5D4F"
+          strokeWidth="2"
+          fill="none"
+          opacity="0.4"
+        />
+        <Path
+          d="M 70 60 Q 72 65, 74 70"
+          stroke="#6B5D4F"
+          strokeWidth="2"
+          fill="none"
+          opacity="0.4"
+        />
 
         {/* Left arm - static */}
         <Ellipse
-          cx="22"
-          cy="65"
-          rx="8"
-          ry="18"
-          fill="#6A8BB5"
-          transform="rotate(-15 22 65)"
+          cx="24"
+          cy="68"
+          rx="7"
+          ry="16"
+          fill="#8B7355"
+          transform="rotate(-20 24 68)"
         />
-        <Circle cx="18" cy="80" r="5" fill="#5A7A9A" />
+        <Circle cx="20" cy="82" r="5" fill="#6B5D4F" />
 
         {/* Right arm and hand - animated waving */}
         <AnimatedG
@@ -198,37 +301,37 @@ export const TrollAvatar: React.FC<TrollAvatarProps> = ({
           animatedProps={animate ? waveProps : undefined}
         >
           <Ellipse
-            cx="78"
-            cy="65"
-            rx="8"
-            ry="18"
-            fill="#6A8BB5"
-            transform="rotate(15 78 65)"
+            cx="76"
+            cy="68"
+            rx="7"
+            ry="16"
+            fill="#8B7355"
+            transform="rotate(20 76 68)"
           />
-          <Circle cx="82" cy="80" r="5" fill="#5A7A9A" />
+          <Circle cx="80" cy="82" r="5" fill="#6B5D4F" />
         </AnimatedG>
 
-        {/* Feet - bigger and cuter */}
+        {/* Feet - big troll feet */}
         <Ellipse
-          cx="38"
+          cx="40"
           cy="94"
-          rx="12"
-          ry="7"
-          fill="#6A8BB5"
+          rx="11"
+          ry="6"
+          fill="#6B5D4F"
         />
         <Ellipse
-          cx="62"
+          cx="60"
           cy="94"
-          rx="12"
-          ry="7"
-          fill="#6A8BB5"
+          rx="11"
+          ry="6"
+          fill="#6B5D4F"
         />
 
-        {/* Toes for extra cuteness */}
-        <Circle cx="35" cy="94" r="2" fill="#5A7A9A" />
-        <Circle cx="41" cy="94" r="2" fill="#5A7A9A" />
-        <Circle cx="59" cy="94" r="2" fill="#5A7A9A" />
-        <Circle cx="65" cy="94" r="2" fill="#5A7A9A" />
+        {/* Toes */}
+        <Circle cx="36" cy="94" r="2" fill="#5A4D3F" />
+        <Circle cx="44" cy="94" r="2" fill="#5A4D3F" />
+        <Circle cx="56" cy="94" r="2" fill="#5A4D3F" />
+        <Circle cx="64" cy="94" r="2" fill="#5A4D3F" />
       </Svg>
     </Animated.View>
   );
