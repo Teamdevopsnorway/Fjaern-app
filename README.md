@@ -175,16 +175,23 @@ hasReachedLimit(); // Function changes on every render
 
 **Solution:**
 
-1. **Use individual value selectors:**
+1. **Use individual value selectors for STATE:**
 ```typescript
 // CORRECT - Only re-renders when specific values change ✅
 const isPro = useSubscriptionStore((s) => s.isPro);
 const deletedCount = useSubscriptionStore((s) => s.deletedCount);
 const allPhotos = usePhotoStore((s) => s.allPhotos);
-const currentIndex = usePhotoStore((s) => s.currentIndex);
 ```
 
-2. **Calculate derived values locally:**
+2. **Use .getState() for FUNCTIONS:**
+```typescript
+// CORRECT - Stable function references that don't cause re-renders ✅
+const incrementDeleteCount = useSubscriptionStore.getState().incrementDeleteCount;
+const markToDelete = usePhotoStore.getState().markToDelete;
+const incrementPhotosCleaned = useGamificationStore.getState().incrementPhotosCleaned;
+```
+
+3. **Calculate derived values locally:**
 ```typescript
 // CORRECT - Calculate locally instead of calling store functions ✅
 const deletedCount = useSubscriptionStore((s) => s.deletedCount);
@@ -197,7 +204,7 @@ const remainingDeletes = isPro ? -1 : Math.max(0, freeDeleteLimit - deletedCount
 ```
 
 **Files Fixed:**
-- ✅ `src/screens/SwipeScreenNew.tsx` - All stores + derived values calculated locally
+- ✅ `src/screens/SwipeScreenNew.tsx` - All stores + functions using .getState()
 - ✅ `src/screens/SwipeScreen.tsx` - All photoStore selectors
 - ✅ `src/screens/ReviewScreenNew.tsx` - All photoStore selectors
 - ✅ `src/screens/ReviewScreen.tsx` - All photoStore selectors
@@ -209,18 +216,21 @@ const remainingDeletes = isPro ? -1 : Math.max(0, freeDeleteLimit - deletedCount
 - ✅ Can swipe through unlimited photos without issues
 - ✅ No more infinite loops or CPU spikes
 - ✅ Proper Zustand selector pattern implemented across entire codebase
+- ✅ Stable function references using .getState()
 - ✅ Vibecode app stays responsive
 - ✅ Derived values calculated locally for better performance
 
 **Technical Explanation:**
 
-Zustand's `useStore()` without a selector returns the entire store object. Each time the component renders, this creates a NEW object reference, even if the values inside are identical. React sees this as a change and triggers a re-render → infinite loop.
+When you select a function from Zustand using a selector like `useStore((s) => s.someFunction)`, Zustand returns a NEW function reference on every render. This is because the selector runs on every render and creates a new reference, even though the function itself is the same.
 
-Additionally, when selecting FUNCTIONS from the store (like `hasReachedLimit`), Zustand returns a new function reference on every render, causing the same infinite loop problem.
+React sees this new reference as a change and triggers a re-render → which creates another new reference → infinite loop.
 
-The solution:
-1. Use individual selectors for VALUES: `useStore((s) => s.value)`
-2. Select only primitive values and calculate derived values locally in the component
+**The solution has 3 parts:**
+
+1. **For STATE values**: Use individual selectors `useStore((s) => s.value)` - Zustand compares primitive values
+2. **For FUNCTIONS**: Use `useStore.getState().functionName` - Get stable reference outside the hook
+3. **For DERIVED values**: Calculate locally in component using state values
 
 ---
 
