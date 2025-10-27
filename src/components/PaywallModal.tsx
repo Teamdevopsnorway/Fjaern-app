@@ -36,8 +36,6 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     onClose();
   };
 
-  if (!visible) return null;
-
   return (
     <Modal
       visible={visible}
