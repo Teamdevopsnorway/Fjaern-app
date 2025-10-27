@@ -7,7 +7,7 @@ import * as Haptics from "expo-haptics";
 export function WelcomeScreenNew(props: any) {
   const handleGetStarted = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    props.navigation.replace("Test");
+    props.navigation.replace("Swipe");
   };
 
   return (
