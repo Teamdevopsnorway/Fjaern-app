@@ -4,8 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { TrollAvatar } from "../components/TrollAvatar";
+import { useGamificationStore } from "../state/gamificationStore";
 
 export function WelcomeScreenNew(props: any) {
+  const currentStreak = useGamificationStore((s) => s.currentStreak);
+  const longestStreak = useGamificationStore((s) => s.longestStreak);
+  const totalPhotosCleaned = useGamificationStore((s) => s.totalPhotosCleaned);
+
   const handleGetStarted = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     props.navigation.navigate("GoalChoice");
@@ -28,6 +33,26 @@ export function WelcomeScreenNew(props: any) {
             <Text style={styles.title}>Møt Fjærn! 👋</Text>
             <Text style={styles.subtitle}>Det søteste trollet som hjelper deg slette bilder du ikke trenger 🗑️✨</Text>
           </View>
+
+          {/* Streak Badge - Show if user has a streak */}
+          {currentStreak > 0 && (
+            <View style={styles.streakBanner}>
+              <View style={styles.streakContent}>
+                <Ionicons name="flame" size={32} color="#FF6B35" />
+                <View style={styles.streakInfo}>
+                  <Text style={styles.streakNumber}>{currentStreak} dager på rad! 🔥</Text>
+                  <Text style={styles.streakSubtext}>
+                    {totalPhotosCleaned} bilder ryddet totalt
+                  </Text>
+                </View>
+              </View>
+              {longestStreak > currentStreak && (
+                <Text style={styles.recordText}>
+                  Rekord: {longestStreak} dager 🏆
+                </Text>
+              )}
+            </View>
+          )}
 
           {/* Features */}
           <View style={styles.features}>
@@ -101,7 +126,7 @@ const styles = StyleSheet.create({
   },
   hero: {
     alignItems: "center",
-    marginBottom: 32,
+    marginBottom: 20,
   },
   trollAvatarContainer: {
     marginBottom: 24,
@@ -110,6 +135,46 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 20,
     elevation: 10,
+  },
+  streakBanner: {
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 24,
+    borderWidth: 3,
+    borderColor: "#FF6B35",
+    shadowColor: "#FF6B35",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  streakContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    marginBottom: 8,
+  },
+  streakInfo: {
+    flex: 1,
+  },
+  streakNumber: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#1F2937",
+    marginBottom: 4,
+  },
+  streakSubtext: {
+    fontSize: 14,
+    color: "#6B7280",
+    fontWeight: "500",
+  },
+  recordText: {
+    fontSize: 13,
+    color: "#92400E",
+    fontWeight: "600",
+    textAlign: "center",
+    marginTop: 4,
   },
   title: {
     color: "#2C5F7C",
