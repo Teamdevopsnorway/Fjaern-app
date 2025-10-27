@@ -45,6 +45,31 @@ En vakker, intuitiv foto-rydde app med et søtt norsk troll som følgesvenn. Ryd
 - **Photo Metadata** - View creation dates and file names
 - **Category Statistics** - See potential savings for each smart category
 
+### 💎 Freemium Model with RevenueCat
+- **Free Tier** - 30 photos/day deletion limit for non-Pro users
+- **Pro Subscriptions** - Unlimited deletion with monthly (49 kr) or yearly (399 kr) plans
+- **RevenueCat Integration** - Full in-app purchase system with:
+  - Real-time subscription status checking
+  - Purchase restoration for users who reinstall
+  - Automatic receipt validation
+  - Cross-platform support (iOS & Android)
+- **Paywall Modal** - Beautiful native modal with:
+  - Dynamic pricing from App Store/Play Store
+  - Progress indicators during purchases
+  - Restore purchases button
+  - Norwegian UI text
+- **Status Sync** - Subscription status syncs on app launch via RevenueCat SDK
+
+**Setup Required:**
+1. Create RevenueCat account at https://www.revenuecat.com/
+2. Add iOS and Android API keys to `/src/utils/revenueCat.ts`
+3. Configure products in RevenueCat dashboard:
+   - Monthly: `$rc_monthly` identifier
+   - Yearly: `$rc_annual` identifier
+   - Entitlement: `pro`
+
+**Note:** RevenueCat is free up to $10k monthly tracked revenue, then $0.50 per $1k MTR.
+
 ## App Structure
 
 ```
@@ -52,7 +77,8 @@ src/
 ├── components/
 │   ├── SwipeCard.tsx          # Animated swipe card component
 │   ├── TrollAvatar.tsx        # Animated troll mascot
-│   └── CelebrationModal.tsx   # Milestone celebration
+│   ├── CelebrationModal.tsx   # Milestone celebration
+│   └── PaywallModal.tsx       # RevenueCat paywall (NEW!)
 ├── screens/
 │   ├── WelcomeScreenNew.tsx   # Onboarding screen
 │   ├── GoalChoiceScreen.tsx   # Choose smart or manual mode
@@ -63,12 +89,14 @@ src/
 │   └── AppNavigator.tsx       # Navigation configuration
 ├── state/
 │   ├── photoStore.ts          # Photo state management
-│   └── gamificationStore.ts   # Streaks, milestones, stats
+│   ├── gamificationStore.ts   # Streaks, milestones, stats
+│   └── subscriptionStore.ts   # Subscription & freemium logic (NEW!)
 ├── types/
 │   └── photo.ts               # TypeScript types
 └── utils/
     ├── photoUtils.ts          # Photo library utilities
-    └── photoAnalysis.ts       # AI categorization & duplicate detection (NEW!)
+    ├── photoAnalysis.ts       # AI categorization & duplicate detection (NEW!)
+    └── revenueCat.ts          # RevenueCat integration utilities (NEW!)
 ```
 
 ## Tech Stack
@@ -78,10 +106,11 @@ src/
 - **React Native Reanimated v3** - Advanced animations
 - **React Native Gesture Handler** - Gesture recognition
 - **React Navigation v7** - Native stack navigation with TypeScript
-- **Zustand** - State management
+- **Zustand** - State management with AsyncStorage persistence
 - **NativeWind** - Tailwind CSS for React Native
 - **Expo Media Library** - Photo access
 - **Expo Haptics** - Tactile feedback
+- **RevenueCat** - In-app purchase & subscription management
 
 ## User Flow
 

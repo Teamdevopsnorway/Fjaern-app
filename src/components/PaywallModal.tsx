@@ -1,8 +1,14 @@
-import React from "react";
-import { View, Text, StyleSheet, Modal, Pressable, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Modal, Pressable, ScrollView, ActivityIndicator, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import {
+  getSubscriptionPackages,
+  purchasePackage,
+  restorePurchases
+} from "../utils/revenueCat";
+import type { PurchasesPackage } from "react-native-purchases";
 
 interface PaywallModalProps {
   visible: boolean;
@@ -19,9 +25,100 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   deletedToday,
   limit,
 }) => {
-  const handleUpgrade = () => {
+  const [monthlyPackage, setMonthlyPackage] = useState<PurchasesPackage | null>(null);
+  const [yearlyPackage, setYearlyPackage] = useState<PurchasesPackage | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
+
+  // Load packages when modal opens
+  useEffect(() => {
+    if (visible) {
+      loadPackages();
+    }
+  }, [visible]);
+
+  const loadPackages = async () => {
+    setIsLoading(true);
+    try {
+      const packages = await getSubscriptionPackages();
+      setMonthlyPackage(packages.monthly);
+      setYearlyPackage(packages.yearly);
+    } catch (error) {
+      console.error("[PaywallModal] Error loading packages:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePurchase = async (pkg: PurchasesPackage) => {
+    if (!pkg) return;
+
+    setIsPurchasing(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-    onUpgrade();
+
+    try {
+      const result = await purchasePackage(pkg);
+
+      if (result.success) {
+        // Success! User is now Pro
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        onUpgrade(); // Update local state
+        onClose();
+      }
+    } catch (error: any) {
+      console.error("[PaywallModal] Purchase error:", error);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+
+      Alert.alert(
+        "Kjøp feilet",
+        "Kunne ikke fullføre kjøpet. Prøv igjen senere.",
+        [{ text: "OK" }]
+      );
+    } finally {
+      setIsPurchasing(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    setIsRestoring(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    try {
+      const isPro = await restorePurchases();
+
+      if (isPro) {
+        // Success! Purchases restored
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        Alert.alert(
+          "Kjøp gjenopprettet! ✨",
+          "Dine tidligere kjøp er nå aktive.",
+          [{ text: "Flott!", onPress: () => {
+            onUpgrade();
+            onClose();
+          }}]
+        );
+      } else {
+        // No purchases found
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+        Alert.alert(
+          "Ingen kjøp funnet",
+          "Vi fant ingen tidligere kjøp på denne kontoen.",
+          [{ text: "OK" }]
+        );
+      }
+    } catch (error) {
+      console.error("[PaywallModal] Restore error:", error);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+
+      Alert.alert(
+        "Gjenoppretting feilet",
+        "Kunne ikke gjenopprette kjøp. Prøv igjen senere.",
+        [{ text: "OK" }]
+      );
+    } finally {
+      setIsRestoring(false);
+    }
   };
 
   const handleClose = () => {
@@ -77,26 +174,74 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
             </View>
 
             {/* Pricing */}
-            <Pressable onPress={handleUpgrade} style={styles.pricingCard}>
-              <LinearGradient
-                colors={["#EF4444", "#DC2626"]}
-                style={styles.pricingGradient}
-              >
-                <Text style={styles.badge}>MEST POPULÆR</Text>
-                <Text style={styles.pricingTitle}>Årlig</Text>
-                <Text style={styles.priceAmount}>399 kr/år</Text>
-                <Text style={styles.pricingSavings}>Spar 189 kr (32%)</Text>
-              </LinearGradient>
-            </Pressable>
+            {isLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#FFFFFF" />
+                <Text style={styles.loadingText}>Laster abonnementer...</Text>
+              </View>
+            ) : (
+              <>
+                <Pressable
+                  onPress={() => yearlyPackage && handlePurchase(yearlyPackage)}
+                  style={styles.pricingCard}
+                  disabled={isPurchasing || !yearlyPackage}
+                >
+                  <LinearGradient
+                    colors={["#EF4444", "#DC2626"]}
+                    style={styles.pricingGradient}
+                  >
+                    {isPurchasing ? (
+                      <ActivityIndicator size="small" color="#FFFFFF" />
+                    ) : (
+                      <>
+                        <Text style={styles.badge}>MEST POPULÆR</Text>
+                        <Text style={styles.pricingTitle}>Årlig</Text>
+                        <Text style={styles.priceAmount}>
+                          {yearlyPackage?.product.priceString || "399 kr/år"}
+                        </Text>
+                        <Text style={styles.pricingSavings}>Spar 189 kr (32%)</Text>
+                      </>
+                    )}
+                  </LinearGradient>
+                </Pressable>
 
-            <Pressable onPress={handleUpgrade} style={styles.pricingCard}>
-              <LinearGradient
-                colors={["#3B82F6", "#1E40AF"]}
-                style={styles.pricingGradient}
-              >
-                <Text style={styles.pricingTitle}>Månedlig</Text>
-                <Text style={styles.priceAmount}>49 kr/måned</Text>
-              </LinearGradient>
+                <Pressable
+                  onPress={() => monthlyPackage && handlePurchase(monthlyPackage)}
+                  style={styles.pricingCard}
+                  disabled={isPurchasing || !monthlyPackage}
+                >
+                  <LinearGradient
+                    colors={["#3B82F6", "#1E40AF"]}
+                    style={styles.pricingGradient}
+                  >
+                    {isPurchasing ? (
+                      <ActivityIndicator size="small" color="#FFFFFF" />
+                    ) : (
+                      <>
+                        <Text style={styles.pricingTitle}>Månedlig</Text>
+                        <Text style={styles.priceAmount}>
+                          {monthlyPackage?.product.priceString || "49 kr/måned"}
+                        </Text>
+                      </>
+                    )}
+                  </LinearGradient>
+                </Pressable>
+              </>
+            )}
+
+            {/* Restore Purchases */}
+            <Pressable
+              onPress={handleRestore}
+              style={styles.restoreButton}
+              disabled={isRestoring || isLoading}
+            >
+              {isRestoring ? (
+                <ActivityIndicator size="small" color="#9CA3AF" />
+              ) : (
+                <Text style={styles.restoreText}>
+                  Gjenopprett tidligere kjøp
+                </Text>
+              )}
             </Pressable>
 
             {/* Continue Free */}
@@ -246,6 +391,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#9CA3AF",
     fontWeight: "500",
+  },
+  loadingContainer: {
+    paddingVertical: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: "#9CA3AF",
+    fontWeight: "500",
+  },
+  restoreButton: {
+    paddingVertical: 12,
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  restoreText: {
+    fontSize: 13,
+    color: "#9CA3AF",
+    fontWeight: "600",
+    textDecorationLine: "underline",
   },
 });
 

@@ -18,6 +18,7 @@ interface SubscriptionState {
   incrementDeleteCount: () => { canDelete: boolean; remaining: number };
   resetDailyCount: () => void;
   upgradeToPro: () => void;
+  syncSubscriptionStatus: (isPro: boolean) => void;
   hasReachedLimit: () => boolean;
   getRemainingDeletes: () => number;
   resetSubscription: () => void; // For testing/dev
@@ -112,6 +113,11 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       // Upgrade to Pro
       upgradeToPro: () => {
         set({ isPro: true });
+      },
+
+      // Sync subscription status with RevenueCat
+      syncSubscriptionStatus: (isPro: boolean) => {
+        set({ isPro });
       },
 
       // Reset subscription (for testing/dev)

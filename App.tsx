@@ -5,6 +5,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AppNavigator } from "./src/navigation/AppNavigator";
+import { initializeRevenueCat, checkSubscriptionStatus } from "./src/utils/revenueCat";
+import { useSubscriptionStore } from "./src/state/subscriptionStore";
 import "./src/utils/appVersion";
 
 // App v3 - Function component exports for screens
@@ -32,6 +34,27 @@ const openai_api_key = Constants.expoConfig.extra.apikey;
 
 export default function App() {
   const [isNavigationReady, setIsNavigationReady] = React.useState(false);
+  const upgradeToPro = useSubscriptionStore((state) => state.upgradeToPro);
+
+  // Initialize RevenueCat and sync subscription status
+  useEffect(() => {
+    const initialize = async () => {
+      // Initialize RevenueCat SDK
+      await initializeRevenueCat();
+
+      // Check subscription status and sync with local store
+      try {
+        const isPro = await checkSubscriptionStatus();
+        if (isPro) {
+          upgradeToPro();
+        }
+      } catch (error) {
+        console.error("[App] Error checking subscription status:", error);
+      }
+    };
+
+    initialize();
+  }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
