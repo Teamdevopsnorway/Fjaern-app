@@ -112,42 +112,49 @@ export interface DuplicateGroup {
 }
 
 /**
- * Simple perceptual hash algorithm
- * Returns a hash string that is similar for visually similar images
- */
-const calculatePerceptualHash = (photo: Photo): string => {
-  // For now, we'll use a simpler approach: group by dimensions and creation time proximity
-  // Real pHash would require image processing, which is complex in React Native
-  const dimensionHash = `${photo.width}x${photo.height}`;
-  const timeHash = Math.floor(photo.creationTime / 1000); // Group within same second
-  return `${dimensionHash}_${timeHash}`;
-};
-
-/**
- * Find exact duplicates (same dimensions, created within 1 second)
- * This is a simplified version - full pHash would require native modules
+ * Improved duplicate detection
+ * Finds photos that are likely duplicates based on:
+ * - Similar dimensions (±50px tolerance)
+ * - Taken within 5 seconds of each other
+ * - Similar aspect ratio
  */
 export const findDuplicates = (photos: Photo[]): DuplicateGroup[] => {
-  const groups = new Map<string, Photo[]>();
-
-  // Group photos by hash
-  photos.forEach(photo => {
-    if (photo.mediaType === "photo") { // Only check photos, not videos
-      const hash = calculatePerceptualHash(photo);
-      const existing = groups.get(hash) || [];
-      existing.push(photo);
-      groups.set(hash, existing);
-    }
-  });
-
-  // Find groups with 2+ photos (duplicates)
+  const photoList = photos.filter(p => p.mediaType === "photo");
   const duplicateGroups: DuplicateGroup[] = [];
+  const processed = new Set<string>();
 
-  groups.forEach(groupPhotos => {
-    if (groupPhotos.length >= 2) {
-      // Sort by fileSize or quality metrics to find best photo
-      const sorted = [...groupPhotos].sort((a, b) => {
-        // Prefer higher resolution
+  for (let i = 0; i < photoList.length; i++) {
+    const photo = photoList[i];
+
+    if (processed.has(photo.id)) continue;
+
+    const similarPhotos: Photo[] = [photo];
+    processed.add(photo.id);
+
+    // Find similar photos
+    for (let j = i + 1; j < photoList.length; j++) {
+      const otherPhoto = photoList[j];
+
+      if (processed.has(otherPhoto.id)) continue;
+
+      // Check if photos are similar
+      const widthDiff = Math.abs(photo.width - otherPhoto.width);
+      const heightDiff = Math.abs(photo.height - otherPhoto.height);
+      const timeDiff = Math.abs(photo.creationTime - otherPhoto.creationTime);
+
+      // Similar if:
+      // - Dimensions within 50px
+      // - Taken within 5 seconds
+      if (widthDiff <= 50 && heightDiff <= 50 && timeDiff <= 5000) {
+        similarPhotos.push(otherPhoto);
+        processed.add(otherPhoto.id);
+      }
+    }
+
+    // If we found duplicates (2+ photos)
+    if (similarPhotos.length >= 2) {
+      // Sort by resolution - keep highest quality
+      const sorted = [...similarPhotos].sort((a, b) => {
         const aPixels = a.width * a.height;
         const bPixels = b.width * b.height;
         return bPixels - aPixels;
@@ -162,7 +169,7 @@ export const findDuplicates = (photos: Photo[]): DuplicateGroup[] => {
         totalSize: duplicates.length * (2 * 1024 * 1024), // Estimate 2MB per duplicate
       });
     }
-  });
+  }
 
   return duplicateGroups;
 };

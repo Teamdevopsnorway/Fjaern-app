@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Pressable, StyleSheet, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { TrollAvatar } from "../components/TrollAvatar";
 import { useGamificationStore } from "../state/gamificationStore";
+import { usePhotoStore } from "../state/photoStore";
+import { loadPhotos, requestPermissions } from "../utils/photoUtils";
+import { categorizePhotos, PhotoCategory } from "../utils/photoAnalysis";
 
 export function WelcomeScreenNew(props: any) {
   const currentStreak = useGamificationStore((s) => s.currentStreak);
@@ -12,10 +15,40 @@ export function WelcomeScreenNew(props: any) {
   const totalPhotosCleaned = useGamificationStore((s) => s.totalPhotosCleaned);
   const updateStreak = useGamificationStore.getState().updateStreak;
 
+  const allPhotos = usePhotoStore((s) => s.allPhotos);
+  const setPhotos = usePhotoStore.getState().setPhotos;
+
+  const [suggestions, setSuggestions] = useState<PhotoCategory[]>([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+
   // Initialize streak on mount
-  React.useEffect(() => {
+  useEffect(() => {
     updateStreak();
+    loadSuggestions();
   }, []);
+
+  const loadSuggestions = async () => {
+    setLoadingSuggestions(true);
+
+    // Request permissions
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) {
+      setLoadingSuggestions(false);
+      return;
+    }
+
+    // Load photos if not already loaded
+    let photos = allPhotos;
+    if (photos.length === 0) {
+      photos = await loadPhotos();
+      setPhotos(photos);
+    }
+
+    // Analyze and get categories
+    const categories = categorizePhotos(photos);
+    setSuggestions(categories);
+    setLoadingSuggestions(false);
+  };
 
   const handleGetStarted = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -58,6 +91,35 @@ export function WelcomeScreenNew(props: any) {
                 </Text>
               )}
             </View>
+          )}
+
+          {/* Smart Suggestions Banner */}
+          {!loadingSuggestions && suggestions.length > 0 && (
+            <Pressable
+              style={styles.suggestionsBanner}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                props.navigation.navigate("GoalChoice");
+              }}
+            >
+              <LinearGradient
+                colors={["#DBEAFE", "#BFDBFE"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.suggestionsGradient}
+              >
+                <View style={styles.suggestionsContent}>
+                  <Ionicons name="sparkles" size={28} color="#1E40AF" />
+                  <View style={styles.suggestionsInfo}>
+                    <Text style={styles.suggestionsTitle}>Smart Forslag Klar!</Text>
+                    <Text style={styles.suggestionsSubtext}>
+                      {suggestions.map((s) => s.photos.length).reduce((a, b) => a + b, 0)} bilder funnet i {suggestions.length} {suggestions.length === 1 ? "kategori" : "kategorier"}
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={24} color="#1E40AF" />
+                </View>
+              </LinearGradient>
+            </Pressable>
           )}
 
           {/* Features */}
@@ -181,6 +243,40 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
     marginTop: 4,
+  },
+  suggestionsBanner: {
+    marginBottom: 24,
+  },
+  suggestionsGradient: {
+    borderRadius: 20,
+    padding: 20,
+    borderWidth: 3,
+    borderColor: "#1E40AF",
+    shadowColor: "#1E40AF",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  suggestionsContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  suggestionsInfo: {
+    flex: 1,
+  },
+  suggestionsTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1E40AF",
+    marginBottom: 4,
+  },
+  suggestionsSubtext: {
+    fontSize: 14,
+    color: "#1E40AF",
+    fontWeight: "500",
+    opacity: 0.8,
   },
   title: {
     color: "#2C5F7C",

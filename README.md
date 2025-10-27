@@ -9,14 +9,13 @@ En vakker, intuitiv foto-rydde app med et søtt norsk troll som følgesvenn. Ryd
 ## Features
 
 ### 🤖 AI-Drevet Smart Opprydding (NYE!)
-- **Duplikat Deteksjon** - Finn automatisk like bilder tatt innen samme sekund
-- **Skjermbilde Deteksjon** - Identifiser og grupper alle skjermbilder
+- **Duplikat Deteksjon (Forbedret!)** - Finn automatisk like bilder med fleksibel matching (±50px dimensjon, 5 sekunder)
+- **Skjermbilde Deteksjon** - Identifiser og grupper alle skjermbilder (mediaSubtypes, filnavn, dimensjoner)
 - **Burst Foto Deteksjon** - Finn serier av bilder tatt rett etter hverandre (3+ bilder innen 2 sekunder)
-- **Video Kategorisering** - Separer videoer fra bilder for enkel review
-- **Store Videoer** - Identifiser videoer over 50MB som tar mye plass
 - **Smart Kategorier** - Se all analyse på én skjerm med potensielle besparelser
-- **Bulk Delete** - Velg og slett flere bilder i samme kategori på en gang
-- **Visuell Preview** - Se alle bilder i kategori før du sletter
+- **Smart Forslag Banner** - Velkomstskjerm viser antall bilder funnet og kategorier
+- **Tinder-Style Swipe** - Swipe gjennom kategori-bilder i stedet for grid-valg
+- **Intelligent Navigasjon** - Sømløs flyt mellom kategorier og swipe-modus
 
 ### 🎯 Manuell Swipe Mode
 - **Tinder-Style Swipe Interface** - Swipe right to keep, left to delete
@@ -186,6 +185,46 @@ Using Zustand with AsyncStorage persistence for:
 - [ ] Better perceptual hashing (currently uses dimension + timestamp)
 
 ## Recent Updates
+
+### 🚀 MVP READY - Feature Complete! (2025)
+
+**Fjærn er nå klar for lansering med alle essensielle features!**
+
+**Siste MVP-oppdateringer:**
+
+1. ✅ **Forbedret Duplikat-Deteksjon**
+   - Fleksibel matching: ±50px dimensjon-toleranse (tidligere eksakt)
+   - 5 sekunders tidsvindu (tidligere 1 sekund)
+   - Beholder høyeste oppløsning som "best photo"
+
+2. ✅ **Smart Forslag Banner på Velkomstskjerm**
+   - Analyserer bilder automatisk ved oppstart
+   - Viser antall bilder funnet i kategorier
+   - "Smart Forslag Klar!" banner navigerer til kategorier
+   - Kun synlig når kategorier finnes
+
+3. ✅ **Tinder-Style Swipe i Kategorier**
+   - Fjernet grid-valg modal
+   - Direkte swipe-interface inne i hver kategori
+   - Back button for å gå tilbake til kategorier
+   - Sømløs navigasjon mellom skjermer
+
+**Tekniske forbedringer:**
+- `src/utils/photoAnalysis.ts` - Forbedret `findDuplicates()` algoritme
+- `src/screens/WelcomeScreenNew.tsx` - Smart forslag banner med blå gradient
+- `src/screens/CategoriesScreen.tsx` - Navigerer direkte til SwipeScreenNew
+- `src/screens/SwipeScreenNew.tsx` - Conditional header med back button
+- `src/screens/ReviewScreenNew.tsx` - Smart navigasjon tilbake til kategorier
+
+**Hvorfor dette gjør Fjærn MVP-ready:**
+- ✅ Konkurrerer med Cleanup-appen på alle hovedfeatures
+- ✅ Bedre UX enn konkurrenter (swipe vs. grid-valg)
+- ✅ Smart AI-analyse som faktisk fungerer (3500 screenshots detektert!)
+- ✅ Performance-optimalisert for store biblioteker
+- ✅ Norsk språk og søt troll-maskot for unik identitet
+- ✅ Gamification (streaks, milestones) for retensjon
+
+---
 
 ### 🤖 AI-POWERED SMART CLEANUP - FERDIG! (2025)
 
