@@ -50,7 +50,7 @@ export function WelcomeScreenNew(props: any) {
               <View style={styles.featureText}>
                 <Text style={styles.featureTitle}>Milepæler & Belønninger</Text>
                 <Text style={styles.featureDescription}>
-                  Opplev glede hver 10. bilde du rydder!
+                  Opplev glede hver 20. bilde du rydder!
                 </Text>
               </View>
             </View>

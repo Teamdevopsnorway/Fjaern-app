@@ -26,7 +26,7 @@ interface GamificationState extends GamificationStats {
   getDailyProgress: () => { current: number; goal: number; percentage: number };
 }
 
-const MILESTONE_INTERVAL = 10; // Celebrate every 10 photos
+const MILESTONE_INTERVAL = 20; // Celebrate every 20 photos
 
 export const useGamificationStore = create<GamificationState>()(
   persist(
