@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AppNavigator } from "./src/navigation/AppNavigator";
+import { initializeIAP, endIAP } from "./src/utils/iapHandler";
 import "./src/utils/appVersion";
 
 // App v3 - Function component exports for screens
@@ -32,6 +33,16 @@ const openai_api_key = Constants.expoConfig.extra.apikey;
 
 export default function App() {
   const [isNavigationReady, setIsNavigationReady] = React.useState(false);
+
+  useEffect(() => {
+    // Initialize In-App Purchases on app startup
+    initializeIAP();
+
+    // Cleanup on app shutdown
+    return () => {
+      endIAP();
+    };
+  }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

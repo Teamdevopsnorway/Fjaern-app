@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { TrollAvatar } from "./TrollAvatar";
 import { useSubscriptionStore } from "../state/subscriptionStore";
+import { restorePurchases } from "../utils/iapHandler";
 
 interface PaywallModalProps {
   visible: boolean;
@@ -49,6 +50,15 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     scale.value = withTiming(0, { duration: 200 });
     setTimeout(onClose, 200);
+  };
+
+  const handleRestore = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    const success = await restorePurchases();
+    if (success) {
+      // Close paywall after successful restore
+      handleClose();
+    }
   };
 
   return (
@@ -160,7 +170,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               </Pressable>
 
               {/* Restore Purchase */}
-              <Pressable onPress={() => {}} style={styles.restoreButton}>
+              <Pressable onPress={handleRestore} style={styles.restoreButton}>
                 <Text style={styles.restoreText}>Gjenopprett Kjøp</Text>
               </Pressable>
 
