@@ -11,24 +11,94 @@ import * as MediaLibrary from "expo-media-library";
 // ============================================
 
 export const isScreenshot = (photo: Photo): boolean => {
-  // Check if mediaSubtypes includes screenshot
-  if (photo.mediaSubtypes && photo.mediaSubtypes.includes("screenshot")) {
-    return true;
+  if (photo.mediaType !== "photo") return false;
+
+  // Check if mediaSubtypes includes screenshot (iOS 14+)
+  if (photo.mediaSubtypes && photo.mediaSubtypes.length > 0) {
+    const hasScreenshotSubtype = photo.mediaSubtypes.some(
+      (subtype) =>
+        subtype.toLowerCase().includes("screenshot") ||
+        subtype.toLowerCase().includes("screen")
+    );
+    if (hasScreenshotSubtype) return true;
   }
 
-  // Also check filename patterns common for screenshots
+  // Check filename patterns common for screenshots
   const screenshotPatterns = [
     /screenshot/i,
     /screen_shot/i,
     /screen-shot/i,
+    /screenrecord/i,
     /skjermbilde/i, // Norwegian
+    /skjermdump/i,  // Norwegian
+    /^IMG_\d{4}\.PNG$/i, // iOS screenshot pattern: IMG_0001.PNG
+    /^Screenshot_\d{4}/i, // Android pattern
   ];
 
-  return screenshotPatterns.some(pattern => pattern.test(photo.filename));
+  const hasScreenshotFilename = screenshotPatterns.some(pattern =>
+    pattern.test(photo.filename)
+  );
+
+  if (hasScreenshotFilename) return true;
+
+  // Additional heuristic: Screenshots on iPhone are typically PNG files
+  // with specific dimensions matching screen resolutions
+  const isPNG = photo.filename.toLowerCase().endsWith('.png');
+
+  if (isPNG) {
+    // Common iPhone screenshot dimensions (portrait and landscape)
+    const commonScreenshotDimensions = [
+      // iPhone 14 Pro Max, 13 Pro Max, 12 Pro Max
+      { w: 1290, h: 2796 }, { w: 2796, h: 1290 },
+      // iPhone 14 Pro, 13 Pro, 12 Pro
+      { w: 1179, h: 2556 }, { w: 2556, h: 1179 },
+      // iPhone 14, 13, 12
+      { w: 1170, h: 2532 }, { w: 2532, h: 1170 },
+      // iPhone 11, XR
+      { w: 828, h: 1792 }, { w: 1792, h: 828 },
+      // iPhone 11 Pro, X, XS
+      { w: 1125, h: 2436 }, { w: 2436, h: 1125 },
+      // iPhone 8 Plus, 7 Plus, 6s Plus
+      { w: 1242, h: 2208 }, { w: 2208, h: 1242 },
+      // iPhone SE, 8, 7, 6s
+      { w: 750, h: 1334 }, { w: 1334, h: 750 },
+    ];
+
+    // Check if dimensions match common screenshot sizes (with 10px tolerance)
+    const matchesDimensions = commonScreenshotDimensions.some(dim => {
+      const widthMatch = Math.abs(photo.width - dim.w) <= 10;
+      const heightMatch = Math.abs(photo.height - dim.h) <= 10;
+      return widthMatch && heightMatch;
+    });
+
+    if (matchesDimensions) return true;
+  }
+
+  return false;
 };
 
 export const findScreenshots = (photos: Photo[]): Photo[] => {
-  return photos.filter(isScreenshot);
+  const screenshots = photos.filter(isScreenshot);
+  console.log(`Screenshot detection: Found ${screenshots.length} out of ${photos.length} photos`);
+
+  // Debug: Show first 5 screenshots found
+  if (screenshots.length > 0) {
+    console.log("First 5 screenshots found:");
+    screenshots.slice(0, 5).forEach(s => {
+      console.log(`  - ${s.filename} (${s.width}x${s.height})`);
+    });
+  }
+
+  // Debug: Check some PNG files that weren't detected
+  const pngFiles = photos.filter(p => p.filename.toLowerCase().endsWith('.png') && !isScreenshot(p));
+  if (pngFiles.length > 0) {
+    console.log(`Found ${pngFiles.length} PNG files that are NOT screenshots. First 5:`);
+    pngFiles.slice(0, 5).forEach(p => {
+      console.log(`  - ${p.filename} (${p.width}x${p.height})`);
+    });
+  }
+
+  return screenshots;
 };
 
 // ============================================

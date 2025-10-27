@@ -36,7 +36,15 @@ export const CategoriesScreen = ({ navigation }: { navigation: any }) => {
     setLoading(true);
     // Run analysis in background
     setTimeout(() => {
+      console.log(`Analyzing ${allPhotos.length} photos...`);
+
+      // Debug: Check first 10 photos
+      allPhotos.slice(0, 10).forEach((photo, idx) => {
+        console.log(`Photo ${idx}: ${photo.filename}, PNG: ${photo.filename.toLowerCase().endsWith('.png')}, Dimensions: ${photo.width}x${photo.height}`);
+      });
+
       const cats = categorizePhotos(allPhotos);
+      console.log(`Found ${cats.length} categories:`, cats.map(c => `${c.name}: ${c.photos.length} items`));
       setCategories(cats);
       setLoading(false);
     }, 500);
